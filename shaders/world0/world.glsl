@@ -11,7 +11,7 @@ allowing more compatibility for future worlds/dimensions and modded worlds/dimen
 // Enable sun/moon in your world. 1 for the standard sun and moon. 2 for the black hole.
 #define WORLD_SUN_MOON 1
 // Sun/moon size
-#define WORLD_SUN_MOON_SIZE 0.1
+#define WORLD_SUN_MOON_SIZE SUN_MOON_SIZE
 
 // Force disable clouds
 // #define FORCE_DISABLE_CLOUDS
@@ -28,8 +28,17 @@ allowing more compatibility for future worlds/dimensions and modded worlds/dimen
 // Use a sky light amount if your world has an undefined sky lighting environment like The End or the Nether
 // #define WORLD_CUSTOM_SKYLIGHT 1.00
 
-// Enable stars in your world
-#define WORLD_STARS toLinear(4.0 - dayCycle * 2.0)
+// Enable stars in your world (smooth fade in during dusk, fade out during dawn)
+#define WORLD_STARS toLinear(2.2 * smoothstep(1.1, 0.4, dayCycle))
+
+// Enable milky way in your world (smooth fade in alongside stars during dusk, fade out during dawn)
+#define WORLD_MILKY_WAY toLinear(1.65 * smoothstep(1.1, 0.4, dayCycle))
+
+// Enable meteor showers in your world (smooth fade in alongside stars during dusk, fade out during dawn)
+#define WORLD_METEORS toLinear(2.0 * smoothstep(1.1, 0.4, dayCycle))
+
+// Enable aurora in your world (smooth fade in during night)
+#define WORLD_AURORA toLinear(1.2 * smoothstep(0.90, 0.25, dayCycle))
 
 // If the world utilizes vanilla sky color
 // #define WORLD_VANILLA_FOG_COLOR
@@ -41,6 +50,8 @@ allowing more compatibility for future worlds/dimensions and modded worlds/dimen
 #define FOG0_VERTICAL_DENSITY_T 0.040 // Vertical density falloff, larger means thinner fog at high altitudes, but thicker fog in low altitudes [0.005 0.010 0.015 0.020 0.025 0.030 0.035 0.040 0.045 0.050 0.055 0.060 0.065 0.070 0.075 0.080 0.085 0.090 0.095 0.100 0.105 0.110 0.115 0.120 0.125 0.130 0.135 0.140 0.145 0.150 0.155 0.160 0.165 0.170 0.175 0.180 0.185 0.190 0.195 0.200 0.205 0.210 0.215 0.220 0.225 0.230 0.235 0.240 0.245 0.250 0.255 0.260 0.265 0.270 0.275 0.280 0.285 0.290 0.295 0.300 0.305 0.310 0.315 0.320 0.325 0.330 0.335 0.340 0.345 0.350 0.355 0.360 0.365 0.370 0.375 0.380 0.385 0.390 0.395 0.40 0.405 0.410 0.415 0.420 0.425 0.430 0.435 0.440 0.445 0.450 0.455 0.460 0.465 0.470 0.475 0.480 0.485 0.490 0.495 0.500]
 
 #define FOG0_TOTAL_DENSITY 0.005 // Total density falloff, larger means thicker fog [0.005 0.010 0.015 0.020 0.025 0.030 0.035 0.040 0.045 0.050 0.055 0.060 0.065 0.070 0.075 0.080 0.085 0.090 0.095 0.100 0.105 0.110 0.115 0.120 0.125 0.130 0.135 0.140 0.145 0.150 0.155 0.160 0.165 0.170 0.175 0.180 0.185 0.190 0.195 0.200 0.205 0.210 0.215 0.220 0.225 0.230 0.235 0.240 0.245 0.250 0.255 0.260 0.265 0.270 0.275 0.280 0.285 0.290 0.295 0.300 0.305 0.310 0.315 0.320 0.325 0.330 0.335 0.340 0.345 0.350 0.355 0.360 0.365 0.370 0.375 0.380 0.385 0.390 0.395 0.40 0.405 0.410 0.415 0.420 0.425 0.430 0.435 0.440 0.445 0.450 0.455 0.460 0.465 0.470 0.475 0.480 0.485 0.490 0.495 0.500]
+
+#define PALE_GARDEN_FOG 1.00 // Pale Garden atmospheric light gray fog intensity [0.00 0.25 0.50 0.75 1.00 1.25 1.50 1.75 2.00 2.25 2.50 2.75 3.00]
 
 // For the shader to read
 #define FOG_VERTICAL_DENSITY lerp(FOG0_VERTICAL_DENSITY_N, FOG0_VERTICAL_DENSITY_T, FOG0_VERTICAL_DENSITY_D, dayCycle)
@@ -70,8 +81,8 @@ const vec3 skyDayColor = vec3(SKY0_DR, SKY0_DG, SKY0_DB) * (SKY0_DI * 0.00392156
 const vec3 lightNightColor = vec3(LIGHT0_NR, LIGHT0_NG, LIGHT0_NB) * (LIGHT0_NI * 0.00392156863);
 
 #define SKY0_NR 0 // Red value [3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99 102 105 108 111 114 117 120 123 126 129 132 135 138 141 144 147 150 153 156 159 162 165 168 171 174 177 180 183 186 189 192 195 198 201 204 207 210 213 216 219 222 225 228 231 234 237 240 243 246 249 252 255]
-#define SKY0_NG 30 // Green value [3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99 102 105 108 111 114 117 120 123 126 129 132 135 138 141 144 147 150 153 156 159 162 165 168 171 174 177 180 183 186 189 192 195 198 201 204 207 210 213 216 219 222 225 228 231 234 237 240 243 246 249 252 255]
-#define SKY0_NB 120 // Blue value [3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99 102 105 108 111 114 117 120 123 126 129 132 135 138 141 144 147 150 153 156 159 162 165 168 171 174 177 180 183 186 189 192 195 198 201 204 207 210 213 216 219 222 225 228 231 234 237 240 243 246 249 252 255]
+#define SKY0_NG 12 // Green value [3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99 102 105 108 111 114 117 120 123 126 129 132 135 138 141 144 147 150 153 156 159 162 165 168 171 174 177 180 183 186 189 192 195 198 201 204 207 210 213 216 219 222 225 228 231 234 237 240 243 246 249 252 255]
+#define SKY0_NB 42 // Blue value [3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99 102 105 108 111 114 117 120 123 126 129 132 135 138 141 144 147 150 153 156 159 162 165 168 171 174 177 180 183 186 189 192 195 198 201 204 207 210 213 216 219 222 225 228 231 234 237 240 243 246 249 252 255]
 #define SKY0_NI 1.00 // Intensity value [0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00 1.05 1.10 1.15 1.20 1.25 1.30 1.35 1.40 1.45 1.50 1.55 1.60 1.65 1.70 1.75 1.80 1.85 1.90 1.95 2.00]
 
 const vec3 skyNightColor = vec3(SKY0_NR, SKY0_NG, SKY0_NB) * (SKY0_NI * 0.00392156863);
@@ -91,11 +102,31 @@ const vec3 lightTwilightColor = vec3(LIGHT0_TR, LIGHT0_TG, LIGHT0_TB) * (LIGHT0_
 
 const vec3 skyTwilightColor = vec3(SKY0_TR, SKY0_TG, SKY0_TB) * (SKY0_TI * 0.00392156863);
 
-// Holds the data on how the light will change according to multiple environmental factors
-#define SUN_COL_DATA_BLOCK mix(lightTwilightColor, lightDayColor, twilightPhase)
-#define MOON_COL_DATA_BLOCK lightNightColor
+#if !defined(PATCHED_SHADER) && !defined(VOXY_SHADING)
+#ifndef WORLD_DAY_DECLARED
+    #define WORLD_DAY_DECLARED
+    uniform int worldDay;
+#endif
+#ifndef MOON_PHASE_DECLARED
+    #define MOON_PHASE_DECLARED
+    uniform int moonPhase;
+#endif
+uniform float sunPower;
+uniform float moonPower;
+#endif
 
-#define LIGHT_COLOR_DATA_BLOCK0 (dayCycle > 1 ? mix(lightTwilightColor, lightDayColor, twilightPhase) : lightNightColor)
+// Moon phase factor: 0.0 (New Moon) to 1.0 (Full Moon)
+// Phase 0: Full (1.0), Phase 1/7: Gibbous (0.75), Phase 2/6: Quarter (0.50), Phase 3/5: Crescent (0.25), Phase 4: New (0.00)
+#define MOON_PHASE_FACTOR (abs(float(moonPhase) - 4.0) * 0.25)
+
+// Holds the data on how the light will change according to multiple environmental factors
+#define SUN_COLOR_BASE mix(lightTwilightColor, lightDayColor, twilightPhase)
+#define MOON_COLOR_BASE (lightNightColor * mix(0.08, 1.00, MOON_PHASE_FACTOR))
+
+#define SUN_COL_DATA_BLOCK (SUN_COLOR_BASE * sunPower)
+#define MOON_COL_DATA_BLOCK (MOON_COLOR_BASE * moonPower)
+
+#define LIGHT_COLOR_DATA_BLOCK0 (dayCycle > 1 ? SUN_COL_DATA_BLOCK : MOON_COL_DATA_BLOCK)
 #define LIGHT_COLOR_DATA_BLOCK1(S, M) (dayCycle > 1 ? S : M)
 
 #define SKY_COLOR_DATA_BLOCK lerp(skyNightColor, skyTwilightColor, skyDayColor, dayCycle)

@@ -52,9 +52,20 @@
 
     uniform sampler2D colortex3;
 
+    #ifdef CHROMATIC_ABERRATION
+        #define HAS_CHROMATIC_ABERRATION
+    #endif
+
     #if (ANTI_ALIASING != 0 && defined SHARPEN_FILTER) || defined CHROMATIC_ABERRATION || defined RETRO_FILTER
         uniform float viewWidth;
         uniform float viewHeight;
+    #endif
+
+    #if ANTI_ALIASING == 1 || ANTI_ALIASING == 3
+        uniform float pixelWidth;
+        uniform float pixelHeight;
+
+        #include "/lib/antialiasing/fxaa.glsl"
     #endif
 
     #if ANTI_ALIASING != 0 && defined SHARPEN_FILTER
@@ -83,7 +94,9 @@
             #define texCoord retroCoord
         #endif
 
-        #ifdef CHROMATIC_ABERRATION
+        #if ANTI_ALIASING == 1 || ANTI_ALIASING == 3
+            finalColOut = textureFXAA(ivec2(gl_FragCoord.xy));
+        #elif defined CHROMATIC_ABERRATION
             vec2 chromaStrength = ((texCoord - 0.5) * ABERRATION_PIXEL_SIZE) * pixelSize;
 
             finalColOut = vec3(

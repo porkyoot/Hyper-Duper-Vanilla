@@ -65,9 +65,6 @@
 
     uniform int renderStage;
 
-    #if WORLD_SUN_MOON == 1 && SUN_MOON_TYPE == 2 && defined WORLD_LIGHT && !defined FORCE_DISABLE_DAY_CYCLE
-        uniform float twilightPhase;
-    #endif
 
     uniform sampler2D gtexture;
     
@@ -78,27 +75,22 @@
         // Alpha test, discard and return immediately
         if(albedo.a < ALPHA_THRESHOLD){ discard; return; }
 
-        #if WORLD_SUN_MOON == 1 && SUN_MOON_TYPE == 2 && defined WORLD_LIGHT && !defined FORCE_DISABLE_DAY_CYCLE
-            // Detect sun
-            if(renderStage == MC_RENDER_STAGE_SUN){
-                // Convert to linear space
-                sceneColOut = toLinear(albedo.rgb * albedo.a) * SUN_COL_DATA_BLOCK * sunMoonIntensitySqrd;
-                return;
-            }
+        // Vanilla sun and moon are drawn in skyRender with custom roundness, size, bloom, and glare
+        if(renderStage == MC_RENDER_STAGE_SUN){ discard; return; }
 
-            // Detect moon
-            if(renderStage == MC_RENDER_STAGE_MOON){
-                // Convert to linear space
-                sceneColOut = toLinear(albedo.rgb * albedo.a) * MOON_COL_DATA_BLOCK * sunMoonIntensitySqrd;
-                return;
-            }
-        #else
-            // Otherwise BEGONE
-            if(renderStage == MC_RENDER_STAGE_SUN){ discard; return; }
-            if(renderStage == MC_RENDER_STAGE_MOON){ discard; return; }
+        #ifdef MC_RENDER_STAGE_MOON
+        if(renderStage == MC_RENDER_STAGE_MOON){ discard; return; }
         #endif
 
-        // Otherwise calculate skybox
-        sceneColOut = toLinear(albedo.rgb * albedo.a) * skyBoxIntensitySqrd;
+        #if WORLD_ID == 1
+            #ifndef END_SKY_TEXTURE_BRIGHTNESS
+                #define END_SKY_TEXTURE_BRIGHTNESS 0.25
+            #endif
+            if(END_SKY_TEXTURE_BRIGHTNESS <= 0.001){ discard; return; }
+            sceneColOut = toLinear(albedo.rgb * albedo.a) * (skyBoxIntensitySqrd * END_SKY_TEXTURE_BRIGHTNESS);
+        #else
+            // Otherwise calculate skybox
+            sceneColOut = toLinear(albedo.rgb * albedo.a) * skyBoxIntensitySqrd;
+        #endif
     }
 #endif

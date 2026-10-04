@@ -138,6 +138,7 @@
 
     #ifndef FORCE_DISABLE_WEATHER
         uniform float rainStrength;
+        uniform float weatherFade;
     #endif
 
     #if defined WATER_STYLIZE_ABSORPTION || defined WATER_FOAM
@@ -149,7 +150,7 @@
         uniform float twilightPhase;
     #endif
 
-    #ifdef WORLD_VANILLA_FOG_COLOR
+    #if defined WORLD_VANILLA_FOG_COLOR || !defined FORCE_DISABLE_WEATHER
         uniform vec3 fogColor;
     #endif
 
@@ -211,8 +212,13 @@
             material.albedo.rgb = vertexColor;
         #endif
 
-        material.smoothness = 0.96; material.emissive = 0.0;
-        material.metallic = 0.04; material.porosity = 0.0;
+        #if WATER_STYLE == 1
+            material.smoothness = 0.0; material.emissive = 0.0;
+            material.metallic = 0.0; material.porosity = 0.0;
+        #else
+            material.smoothness = 0.96; material.emissive = 0.0;
+            material.metallic = 0.04; material.porosity = 0.0;
+        #endif
         material.ss = 0.0;
         
         // Currently unused
@@ -221,7 +227,12 @@
 
         // If water
         if(blockId == DH_BLOCK_WATER){
-            float waterNoise = WATER_BRIGHTNESS;
+            #if WATER_STYLE == 1
+                material.albedo.rgb = vertexColor * vec3(0.20, 0.14, 0.52);
+                float waterNoise = WATER_BRIGHTNESS;
+            #else
+                float waterNoise = WATER_BRIGHTNESS;
+            #endif
 
             #ifdef WATER_NORMAL
                 vec4 waterData = H2NWater(waterNoiseUv).xzyw;
@@ -245,10 +256,27 @@
                 if(isEyeInWater == 0){
                     float depthBrightness = exp2(waterDepth * 0.25);
                     material.albedo.rgb = material.albedo.rgb * (waterNoise * (1.0 - depthBrightness) + depthBrightness);
-                    material.albedo.a = fastSqrt(material.albedo.a) * (1.0 - depthBrightness);
+                    #if WATER_STYLE == 1
+                        float vanillaOpacity = mix(0.78, 0.92, 1.0 - depthBrightness * 0.70);
+                        material.albedo.a = max(material.albedo.a, vanillaOpacity);
+                    #else
+                        material.albedo.a = max(fastSqrt(material.albedo.a) * (1.0 - depthBrightness), 0.40);
+                    #endif
                 }
-                else material.albedo.rgb *= waterNoise;
+                else {
+                    #if WATER_STYLE == 1
+                        material.albedo.a = max(material.albedo.a, 0.90);
+                    #else
+                        material.albedo.a = max(material.albedo.a, 0.40);
+                    #endif
+                    material.albedo.rgb *= waterNoise;
+                }
             #else
+                #if WATER_STYLE == 1
+                    material.albedo.a = max(material.albedo.a, 0.90);
+                #else
+                    material.albedo.a = max(material.albedo.a, 0.40);
+                #endif
                 material.albedo.rgb *= waterNoise;
             #endif
 
@@ -270,6 +298,6 @@
         // Write buffer datas
         normalDataOut = material.normal;
         albedoDataOut = material.albedo.rgb;
-        materialDataOut = vec3(material.metallic, material.smoothness, 0.5);
+        materialDataOut = vec3(material.metallic, material.smoothness, (blockId == DH_BLOCK_WATER) ? 0.35 : 0.5);
     }
 #endif

@@ -1,11 +1,21 @@
-// Texture coordinate derivatives
-vec2 dcdx = dFdx(texCoord);
-vec2 dcdy = dFdy(texCoord);
+uniform ivec2 atlasSize;
+
+// Sample texture with crisp texel center alignment to guarantee authentic pixel art
+// even under modded linear samplers (such as unmodified Litematica schematic rendering)
+vec4 sampleCrispAlbedo(in vec2 coord, in vec2 dcdx, in vec2 dcdy){
+    vec2 atlasRes = atlasSize.x > 0 ? vec2(atlasSize) : vec2(textureSize(gtexture, 0));
+    vec2 invAtlasRes = 1.0 / atlasRes;
+    vec2 snappedCoord = (floor(coord * atlasRes) + 0.5) * invAtlasRes;
+    return textureGrad(gtexture, snappedCoord, dcdx, dcdy);
+}
 
 // The Integrated PBR calculation
 void getPBR(inout dataPBR material, in int id){
+    vec2 dcdx = dFdx(texCoord);
+    vec2 dcdy = dFdy(texCoord);
+
     // Assign albedo
-    material.albedo = textureGrad(gtexture, texCoord, dcdx, dcdy);
+    material.albedo = sampleCrispAlbedo(texCoord, dcdx, dcdy);
 
     // Alpha test, discard and return immediately
     if(material.albedo.a < ALPHA_THRESHOLD){ discard; return; }
@@ -15,7 +25,7 @@ void getPBR(inout dataPBR material, in int id){
 
     // Generate bumped normals
     #if (defined TERRAIN || defined WATER || defined BLOCK || defined BLOCK_TRANSLUCENT) && defined NORMAL_GENERATION
-        if(id != 11100 && id != 11102 && id != 12101){
+        if(id != 0 && id != 11100 && id != 11102 && id != 12101){
             const float autoGenNormPixSize = 1.0 / NORMAL_GENERATION_RESOLUTION;
             vec2 topRightCorner = fract(vTexCoord - autoGenNormPixSize) * vTexCoordScale + vTexCoordPos;
             vec2 bottomLeftCorner = fract(vTexCoord + autoGenNormPixSize) * vTexCoordScale + vTexCoordPos;
@@ -46,8 +56,8 @@ void getPBR(inout dataPBR material, in int id){
         // If lava and fire
         if(id == 11100 || id == 12101) material.emissive = 1.0;
 
-        // Foliage and corals
-        else if((id >= 10000 && id <= 10800) || (id >= 11600 && id <= 11799) || id == 10900 || id == 11101 || id == 12200) material.ss = 0.75;
+        // Foliage and corals (kelp/seagrass 12200 excluded to avoid glowing underwater)
+        else if((id >= 10000 && id <= 10800) || (id >= 11600 && id <= 11799) || id == 10900 || id == 11101) material.ss = 0.75;
     #else
         // For others, don't use vanilla AO
         material.ambient = 1.0;
@@ -56,8 +66,13 @@ void getPBR(inout dataPBR material, in int id){
     #ifdef WATER
         // If water
         if(id == 11102){
-            material.smoothness = 0.96;
-            material.metallic = 0.02;
+            #if WATER_STYLE == 1
+                material.smoothness = 0.55;
+                material.metallic = 0.005;
+            #else
+                material.smoothness = 0.96;
+                material.metallic = 0.02;
+            #endif
 
             #ifdef WATER_FLAT
                 material.albedo.rgb = vec3(0.8);
@@ -80,6 +95,9 @@ void getPBR(inout dataPBR material, in int id){
 
         // Charged creeper
         else if(id == 10132) material.emissive = float(material.albedo.b > material.albedo.g);
+
+        // Creaking eyes
+        else if(id == 10134) material.emissive = float(material.albedo.r > sumOf(material.albedo.gb) * 0.8);
     #endif
 
     #if PBR_MODE == 1
@@ -296,12 +314,12 @@ void getPBR(inout dataPBR material, in int id){
     #endif
 
     #if COLOR_MODE == 0
-        material.albedo.rgb *= vertexColor;
+        material.albedo.rgb *= vertexColor.rgb;
     #elif COLOR_MODE == 1
         material.albedo.rgb = vec3(1);
     #elif COLOR_MODE == 2
         material.albedo.rgb = vec3(0);
     #elif COLOR_MODE == 3
-        material.albedo.rgb = vertexColor;
+        material.albedo.rgb = vertexColor.rgb;
     #endif
 }

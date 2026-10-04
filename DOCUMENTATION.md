@@ -1,160 +1,168 @@
-# Coding Standards
-These standards must be kept in order to keep the code format consistent and readable.
+# HyperDuper Vanilla v1.0.0 — Architecture & Technical Documentation
 
-* Minimizing resources and maximizing performance is top priority. Quality is secondary.
-* Follow the rules of code formatting. See [CONTRIBUTION.md](CONTRIBUTION.md) for more information.
-* Document and explain your code if possible.
+> **HyperDuper Vanilla** is created and maintained by **[@porkyoot](https://github.com/porkyoot) (Étoile)**. It is an independent, performance-tuned fork of [**Super Duper Vanilla**](https://github.com/Eldeston/Super-Duper-Vanilla) (originally by [@Eldeston](https://github.com/Eldeston) / FlameRender Studios).
+> 
+> **Disclaimer & Maintenance Notice**: This project is provided strictly on an **"AS IS"** basis without guarantees or warranties of any kind. Developers and players are warmly invited to fork, experiment, and adapt this code.
+> 
+> **AI Vibecoding Disclosure**: This project is built using AI pair-programming and vibecoding for rapid iteration, complex shader mathematics, and UI/UX design. All shader code is verified via our automated Quality Gate pipeline.
 
-# GLSL Version
-The shader version used for this pipeline is **GLSL 3.3 compatibility**. There is an exception however for the program `gbuffers_line` where it uses **GLSL 3.3 core**.
+---
 
-For more information of the specifications of this version see this [documentation provided by Khronos](https://registry.khronos.org/OpenGL/specs/gl/GLSLangSpec.3.30.pdf).
+# Coding Standards & Guidelines
 
-# Used Buffers
-Current shader pipeline uses 6 framebuffers to minimize resources used and maximize performance. Their usages are listed in order of what's written first separated by forward slashes and channels separated by commas.
+* **Performance First**: Minimizing resource utilization, avoiding redundant buffer reads, and maximizing framerate is top priority.
+* **Readable Code**: Maintain descriptive uniform and variable names, document mathematical derivations, and format code cleanly.
+* **Continuous Validation**: All changes must pass `python3 scripts/quality_gate.py` (GLSL compilation, i18n consistency, cyclomatic complexity, and include resolution).
 
-| Buffers   | Format         | Usage                                                                             |
-| --------- | -------------- | --------------------------------------------------------------------------------- |
-| colortex0 | R11F_G11F_B10F | Clouds (RG) / Bloom (RGB)                                                         |
-| colortex1 | RGB16_SNORM    | Normals (RGB)                                                                     |
-| colortex2 | RGBA8          | Albedo (RGB), SSAO (A)                                                            |
-| colortex3 | RGB8           | Metal (R), Smooth (G), Glow / Translucents mask (B) / Main LDR (RGB) / FXAA (RGB) |
-| colortex4 | R11F_G11F_B10F | Main HDR (RGB) / Vanilla skybox (RGB)                                             |
-| colortex5 | RGBA16F        | TAA (RGB) / Previous frame (RGB), Auto exposure (A)                               |
+---
 
-# Custom Defined Macros
-This shader uses custom defined macros in every program and .glsl file for each world folders all connected to the main programs in the main folder. This is to keep the workflow minimized and understandable, and to identify what folder/program the shader is being used.
+# GLSL Dialect & Specifications
 
-## Dimension Macros
-Found in all world.glsl files. Dimension macros define the world's lighting properties. These are not finalized and are still a work in progress as they tend to be inconsistent thus the reason of it being not available to the common user.
+The pipeline targets **GLSL 3.3 compatibility** across the main stages, with the exception of `gbuffers_line` which operates on **GLSL 3.3 core**.
 
-| Dimension Macros    | Data Type | Usage                   |
-| ------------------- | --------- | ----------------------- |
-| WORLD_ID            | int       | World ID                |
-| WORLD_LIGHT         | none      | World enabled shadows   |
-| WORLD_SUN_MOON      | int       | World light source type |
-| WORLD_SUN_MOON_SIZE | float     | World light source size |
+For specifications, refer to the [Khronos GLSL 3.30 Specification](https://registry.khronos.org/OpenGL/specs/gl/GLSLangSpec.3.30.pdf).
 
-## Complex Programs
-List of programs with complex lighting. Common complex processes are in these programs. They compute complex processes such as PBR and vertex displacement for animations and tend to be very expensive.
+---
 
-## Basic Programs
-List of programs with basic lighting. Common basic processes are in these programs. They compute basic processes that complex programs have, but with removed features that the program doesn't necessarily need.
+# Framebuffer Architecture
 
-## Simple programs
-List of programs with simpler shading. Common simple processes are in these programs. As the name suggests, they compute very simple and fast processes. The reason is usually because they don't need additional features as they tend to slow GPU performance.
+The pipeline utilizes 6 shared framebuffers to minimize VRAM bandwidth and maximize throughput:
 
-## Disabled programs
-List of discarded and disabled programs. They typically have no other purposes other than disabling a program by using `discard;` + `return;`. This method is used to conveniently disable programs without using `shaders.properties` to disable the program per world.
+| Buffer    | Format         | Channel Usage / Multiplexing                                                              |
+| --------- | -------------- | ----------------------------------------------------------------------------------------- |
+| `colortex0` | R11F_G11F_B10F | Clouds (RG) / Bloom Downsample & Upsample Pyramid (RGB)                                   |
+| `colortex1` | RGB16_SNORM    | Packed Surface Normals (RGB)                                                              |
+| `colortex2` | RGBA8          | Albedo (RGB), Screen Space Ambient Occlusion [SSAO] (A)                                    |
+| `colortex3` | RGB8           | Metallic (R), Smoothness (G), Emissive / Translucent Mask (B) / Main LDR (RGB) / FXAA (RGB) |
+| `colortex4` | R11F_G11F_B10F | Main HDR Color (RGB) / Vanilla Skybox (RGB)                                               |
+| `colortex5` | RGBA16F        | TAA History (RGB) / Previous Frame Buffer (RGB), Auto Exposure Log-Luminance (A)          |
 
-## Program Properties
-Found in their respective programs in .fsh and .vsh files. The following are the listed common program macros. These macros typically describes the program and its properties.
+---
 
-This list's purpose is to fully realize the shader pipeline (based on Iris) and visualize the flow of data across programs and their purpose.
+# Multi-Dimension Architecture
 
-### Before Gbuffers
-| Program Macros        | Blend Type  | Program Type     | Shading Type | Usage            |
-| --------------------- | ----------- | ---------------- | ------------ | ---------------- |
-| PHYSICS_OCEAN_SHADOW  | Solid       | PHYSICS_SHADOW   | Shadow       | Physics Mod      |
-| SHADOW_BLOCK          | Solid       | SHADOW           | Shadow       | Iris             |
-| SHADOW_CUTOUT         | Solid       | SHADOW           | Shadow       | Iris/Optifine    |
-| SHADOW_ENTITIES       | Solid       | SHADOW           | Shadow       | Iris             |
-| SHADOW_LIGHTNING      | Solid       | SHADOW           | Disabled     | Iris             |
-| SHADOW_SOLID          | Solid       | SHADOW           | Shadow       | Iris/Optifine    |
-| SHADOW_WATER          | Solid       | SHADOW           | Shadow       | Iris             |
-| SHADOW                | Solid       | SHADOW           | Shadow       | Iris/Optifine    |
+HyperDuper Vanilla features a modular, multi-dimension pipeline that allows individual worlds to define distinct lighting, atmospheres, and celestial behaviors while sharing core rendering libraries.
 
-### Before Deferred
-| Program Macros        | Blend Type  | Program Type     | Shading Type | Usage            |
-| --------------------- | ----------- | ---------------- | ------------ | ---------------- |
-| DH_TERRAIN            | Solid       | DH_GBUFFERS      | Complex      | Distant Horizons |
-| DH_GENERIC            | Solid       | DH_GBUFFERS      | Basic        | Distant Horizons |
-| ARMOR_GLINT           | Add         | GBUFFER          | Simple       | Iris/Optifine    |
-| BASIC                 | Solid       | GBUFFER          | Basic        | Iris/Optifine    |
-| BEACON_BEAM           | Add         | GBUFFER          | Simple       | Iris/Optifine    |
-| DAMAGED_BLOCK         | Solid       | GBUFFER          | Simple       | Iris/Optifine    |
-| LINE                  | Solid       | GBUFFER          | Basic        | Iris/Optifine    |
-| SKY_BASIC             | Solid       | GBUFFER          | Disabled     | Iris/Optifine    |
-| SKY_TEXTURED          | Solid       | GBUFFER          | Simple       | Iris/Optifine    |
-| TERRAIN               | Solid       | GBUFFER          | Complex      | Iris/Optifine    |
-| DEFERRED(0-99)        | None        | DEFERRED         | Post         | Iris/Optifine    |
+### Dimension Routing (`shaders/dimension.properties`)
+Dimensions are mapped to shader world configurations:
+```properties
+# Overworld (fallback for all standard dimensions)
+dimension.world0 = *
 
-## Mixed
-| Program Macros        | Blend Type  | Program Type     | Shading Type | Usage            |
-| --------------------- | ----------- | ---------------- | ------------ | ---------------- |
-| PARTICLES             | Transparent | GBUFFER          | Basic        | Iris             |
-| ENTITIES              | Transparent | GBUFFER          | Complex      | Iris/Optifine    |
-| BLOCK                 | Transparent | GBUFFER          | Complex      | Iris/Optifine    |
-| HAND                  | Transparent | GBUFFER          | Complex      | Iris/Optifine    |
+# The Nether (devoid of direct sunlight; fog-dominated)
+dimension.world-1 = minecraft:the_nether minecraft:nether undergarden:undergarden
 
-### Before Composite
-| Program Macros        | Blend Type  | Program Type     | Shading Type | Usage            |
-| --------------------- | ----------- | ---------------- | ------------ | ---------------- |
-| PHYSICS_OCEAN         | Solid       | PHYSICS_GBUFFERS | Complex      | Physics Mod      |
-| DH_WATER              | Transparent | DH_GBUFFERS      | Complex      | Distant Horizons |
-| CLOUDS                | Transparent | GBUFFER          | Simple       | Iris/Optifine    |
-| LIGHTNING             | Add         | GBUFFER          | Basic        | Iris             |
-| TEXTURED              | Transparent | GBUFFER          | Basic        | Iris/Optifine    |
-| SPIDER_EYES           | Add         | GBUFFER          | Simple       | Iris/Optifine    |
-| WATER                 | Transparent | GBUFFER          | Complex      | Iris/Optifine    |
-| WEATHER               | Transparent | GBUFFER          | Simple       | Iris/Optifine    |
-| COMPOSITE(0-99)       | None        | COMPOSITE        | Post         | Iris/Optifine    |
+# The End (cosmic void with central black hole)
+dimension.world1 = minecraft:the_end minecraft:end
+```
 
-Note to Eldeston: Clarify program names with its purpose.
+### Dimensions Menu Hierarchy (`shaders/shaders.properties`)
+The GUI hierarchy provides clean separation and easy expansion:
+```properties
+screen.DIMENSIONS = \
+    [BLOCK_LIGHT_COLOR] <empty> \
+    <empty> <empty> \
+    [OVERWORLD_SETTINGS] [NETHER_SETTINGS] \
+    [END_SETTINGS] <empty>
+```
+* **Top Row**: Global options common to all dimensions (e.g. `[BLOCK_LIGHT_COLOR]`, configuring warm torchlight and lantern light across all worlds).
+* **Divider**: Clean visual separation.
+* **Dimension List**: Individual dimension subscreens. To add a new dimension (e.g. Aether), add `[AETHER_SETTINGS]` next to `[END_SETTINGS]` and route it in `dimension.properties`.
 
-# Incompatible Mods
-List of incompatible mods.
+---
 
-| Mods       | Compatibility | Status       |
-| ---------- | ------------- | ------------ |
-| Astrocraft | Visual bug    | Low priority |
-| Nuit       | Visual bug    | Low priority |
+# New Features & Atmospheric Subsystems
 
-# TO DO (for Eldeston)
-Notes for pending features/bug fixes to be implemented categorized by importance.
+### 1. Atmospheric Godrays (`shaders/lib/atmospherics/godrays.glsl`)
+* **Raymarched Crepuscular Rays**: Calculates light shafts streaming from the sun and moon through clouds, foliage, water, and terrain.
+* **Adaptive Step Optimization (`GODRAYS_ADAPTIVE_STEPS`)**: Dynamically concentrates sample steps when the player looks toward the sun, **doubling FPS when facing the celestial body** with zero visual loss.
+* **Water Transmission (`GODRAYS_WATER_TRANSMISSION`)**: Allows sunbeams to stream into water bodies and through stained glass by sampling translucent depth buffers.
 
-## PENDING
-* Create a custom shadow model view (low priority)
-* Fix gbuffers_skytextured (medium priority)
+### 2. Procedural Meteor Showers (`shaders/lib/atmospherics/meteorShowers.glsl`)
+* **Nighttime Shooting Stars**: Procedural dynamic meteors featuring glowing leading pixel heads, ionization tails, and exponential trail fades.
+* **Customization**:
+  * **Rarity Scheduling**: Every night, periodic (2-3, 4-5, 7-8, 12-15 nights), or lunar cycle (New Moon).
+  * **6 Color Palettes**: Electric Blue, Cosmic Violet, Emerald Green, Amber Gold, Diamond White, and Prismatic (per-meteor randomized colors).
+  * **Activity Modes**: Constant stream vs dynamic waxing/waning shower waves.
+  * **Sky Distribution**: Panoramic full sky, directional stream, or radiant-focused.
 
-* Find a way to make translucent detection more dynamic (medium priority)
+### 3. Procedural Milky Way & Stars (`shaders/lib/atmospherics/milkyWay.glsl`)
+* **Stylized Galactic Band**: Procedural cosmic ribbon with thousands of twinkling square stars and nebula dust across the clear night sky.
+* **Star Rotation Styles (`STAR_ROTATION`)**: Aligned square grid stars or organic random star rotation angles.
 
-* Improve world properties calculation
-* Improve settings UI
+### 4. Volumetric Auroras (`shaders/lib/atmospherics/aurora.glsl`)
+* **Northern Lights**: Multi-tiered volumetric curtains flowing from pink tops to emerald centers and electric blue bottoms in cold, snowy, and icy biomes.
 
-* Rebuild pipeline and include visualization (high priority)
-* Document the shader pipeline (high priority)
+### 5. Double Rainbows (`shaders/lib/atmospherics/rainbow.glsl`)
+* **Analytical Optics**: Renders primary and secondary rainbow arches opposite the sun or moon during rainfall with partial sunlight.
+* Follows `SUN_MOON_ROUNDNESS` geometry (circular rainbow or square rainsquare).
 
-* Separate iPBR for all gbuffers (medium priority)
+### 6. Dynamic Weather & Humidity Fog (`shaders/shaders.properties`)
+* **Dynamic Weather Cycle**: Multi-day procedural weather clock generating gradual overcast transitions.
+* **Dynamic Biome Fog**: Couples weather moisture with biome humidity: swamps, rivers, and jungles develop thick morning mist, while arid biomes stay clear.
+* **Pale Garden Fog**: Light-gray atmospheric gloom for the Pale Garden biome.
 
-* Optimize alpha testing (high priority)
-* Optimize DOF calculations with noise (low priority)
-* Optimize block ids in block.properties (medium priority)
-* Optimize day and night transition calculations (medium priority)
+### 7. The End Dimension Lighting (`shaders/world1/world.glsl`)
+* **Black Hole Directional Light (`END_BH_LIGHT`)**: Faint permanent directional light cast from the cosmic black hole accretion disk.
+* **Ender Dragon Boss Fog (`END_BOSS_FOG`)**: Cinematic purple atmospheric fog during the dragon encounter.
 
-* Refactor uniform usage and remove unecessary ones (medium priority)
-* Format the goodness knows how much nesting I used in my code because BROTHA EWWHH (maximum priority)
+### 8. Voxy LOD Integration (`shaders/main/modded/voxy.glsl`, `shaders/voxy.json`)
+* Full pipeline support for Voxy distant Level-of-Detail terrain across all dimensions with PBR material lookups, custom UBO layout, and horizon fog integration.
 
-## CURRENT
-* Implement bit packing for optimization
+---
 
-* Refactor parallax occlusion mapping
-* Change cloud texture
+# Program Pipeline & Pass Classification
 
-* Improve fog calculation and settings (medium priority)
-* Improve water absorption (low priority)
-* Improve tonemapping (medium priority)
-* Improve Distant Horizons depth
-* Improve subsurface scattering
-* Improve shadow filtering
-* Improve shader menu UI
+### G-Buffer Passes
+| Program               | Blend Mode  | Shading Complexity | Description / Role                                        |
+| --------------------- | ----------- | ------------------ | --------------------------------------------------------- |
+| `gbuffers_terrain`    | Solid       | Complex (PBR)      | Solid world blocks, terrain displacement, animated waving |
+| `gbuffers_water`      | Translucent | Complex (PBR)      | Water surface, wave normals, absorption, foam             |
+| `gbuffers_entities`   | Translucent | Complex (PBR)      | Living entities, mobs, players, armor, item frames        |
+| `gbuffers_block`      | Translucent | Complex (PBR)      | Translucent blocks, stained glass, ice, portals           |
+| `gbuffers_clouds`     | Translucent | Simple             | Cloud layer rendering                                     |
+| `gbuffers_weather`    | Translucent | Simple             | Animated rain and snow precipitation                      |
+| `gbuffers_skytextured`| Solid       | Simple             | Celestial textures (sun, moon, End sky backdrop)          |
 
-## DONE
-* Abandon Optifine support (high priority)
+### Deferred Passes
+| Program               | Description / Role                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------------- |
+| `deferred`            | Screen Space Ambient Occlusion (SSAO) pass (disabled via shaders.properties if SSAO off)  |
+| `deferred1`           | Atmospheric lighting, sky rendering, direct sunlight/moonlight, and shadow mapping       |
 
-* Finish programming dh_generic (medium priority)
+### Composite Passes
+| Program               | Description / Role                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------------- |
+| `composite`           | Volumetric clouds, volumetric haze, godrays, and underwater caustics                      |
+| `composite_translucent`| Translucent composite blending and reflections                                           |
+| `composite1_taa`      | Temporal Anti-Aliasing (TAA) history accumulation                                         |
+| `composite2_motionblur`| Velocity-based motion blur (disabled via shaders.properties if motion blur off)            |
+| `composite3_dof`      | Depth of Field bokeh blur (disabled via shaders.properties if DOF off)                    |
+| `composite4_bloom_pass1`| Bloom downsampling and bright-pass extraction (disabled if bloom off)                    |
+| `composite5_bloom_pass2`| Bloom upsampling and blur accumulation (disabled if bloom off)                            |
+| `composite6_tonemap`  | Color grading, contrast, saturation, exposure, and tonemapping rolloff                    |
+| `final`               | FXAA post-processing, block outlines, retro filter, and final output display             |
 
-* Fix dragon death beam (medium priority) ?
-* Fix FXAA, it was broken the whole time (high priority)
+---
 
-* Implement portal depth for Nether and End
+# Quality Gate & Testing Tools
+
+The repository contains automated tools to maintain code quality, ensure valid compilation, and benchmark performance:
+
+### Continuous Quality Gate (`python3 scripts/quality_gate.py`)
+Executes a 4-stage validation pipeline:
+1. **GLSL Compilation**: Validates all 240+ shader variants against OpenGL/Iris specifications using `glslangValidator`.
+2. **i18n Translation Consistency**: Validates `en_US.lang` against `shaders.properties`, checking coverage, duplicate keys, and syntax.
+3. **File Length & Complexity**: Enforces Single Responsibility and KISS guidelines (file lengths and McCabe cyclomatic complexity).
+4. **Include Integrity**: Ensures every `#include` directive resolves to an existing file.
+
+### Static Performance Profiler (`python3 scripts/profile_shaders.py`)
+* Analyzes all shader passes across Overworld, Nether, and End dimensions.
+* Quantifies texture fetch counts, distinct sampler usage, transcendental math operations (`pow`, `exp`, `sin`, `cos`, `atan`), loop iterations, and branching.
+* Calculates a weighted **GPU Cost Index** to identify optimization bottlenecks.
+* Supports regression benchmarking: `python3 scripts/profile_shaders.py --compare baseline.json current.json`.
+
+### In-Game Runtime Profiling
+* **Live Reload**: Press **`R`** in-game to recompile and hot-reload shaders instantly without restarting Minecraft.
+* **Spark Profiler**: Run `/sparkc profiler start` and `/sparkc profiler stop` to generate CPU/GPU render thread call trees.
+* **RenderDoc / Nsight**: Launch with `task run:renderdoc` or `task run:nsight` for draw-call and hardware counter inspection.

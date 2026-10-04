@@ -1,3 +1,6 @@
+#ifndef SHD_MAPPING_GLSL
+#define SHD_MAPPING_GLSL
+
 // Enable filtering on shadows
 const int shadowMapResolution = 1024; // Shadow map resolution. Increase for more resolution at the cost of performance. [512 1024 1536 2048 2560 3072 3584 4096 4608 5120 5632 6144 6656 7168 7680 8192]
 const float shadowMapPixelSize = 1.0 / shadowMapResolution; // Shadow map pixel size. Calculated as the reciprocal of the shadow map resolution.
@@ -18,17 +21,27 @@ uniform sampler2DShadow shadowtex0;
 	uniform sampler2D shadowcolor0;
 #endif
 
+#if WORLD_ID == 1
+	#ifndef HEAVY_FOG_UNIFORM_DECLARED
+		#define HEAVY_FOG_UNIFORM_DECLARED
+		uniform int heavyFog;
+	#endif
+#endif
+
 vec3 getShdCol(in vec3 shdPos){
+	// Early exit if sample point is outside shadow frustum bounds
+	if(clamp(shdPos, 0.0, 1.0) != shdPos) return vec3(1.0);
+
 	#ifdef SHADOW_COLOR
 		// Sample shadows
 		float shd0 = textureLod(shadowtex0, shdPos, 0);
 		// If not in shadow, return "white"
-		if(shd0 == 1) return vec3(1);
+		if(shd0 == 1.0) return vec3(1.0);
 
 		// Sample opaque only shadows
 		float shd1 = textureLod(shadowtex1, shdPos, 0);
 		// If in shadow, return "black"
-		if(shd1 == 0) return vec3(0);
+		if(shd1 == 0.0) return vec3(0.0);
 		// Otherwise, calculate the full shadow color
 		return texelFetch(shadowcolor0, ivec2(shdPos.xy * shadowMapResolution), 0).rgb * (1.0 - shd0) * shd1 + shd0;
 	#else
@@ -38,7 +51,17 @@ vec3 getShdCol(in vec3 shdPos){
 }
 
 vec3 getShdCol(in vec3 shdPos, in float dither){
-	vec2 randVec = vec2(cos(dither), sin(dither)) * shadowMapPixelSize;
+	// Early exit if outside shadow frustum bounds before computing dither offsets
+	if(clamp(shdPos, 0.0, 1.0) != shdPos) return vec3(1.0);
+
+	#if WORLD_ID == 1
+		if(heavyFog == 0) return getShdCol(shdPos);
+		float filterScale = 2.0;
+	#else
+		const float filterScale = 1.0;
+	#endif
+
+	vec2 randVec = vec2(cos(dither), sin(dither)) * (shadowMapPixelSize * filterScale);
 
 	#if ANTI_ALIASING >= 2
 		return getShdCol(vec3(shdPos.xy + randVec, shdPos.z));
@@ -46,3 +69,5 @@ vec3 getShdCol(in vec3 shdPos, in float dither){
 		return (getShdCol(vec3(shdPos.xy + randVec, shdPos.z)) + getShdCol(vec3(shdPos.xy - randVec, shdPos.z))) * 0.5;
 	#endif
 }
+
+#endif // SHD_MAPPING_GLSL

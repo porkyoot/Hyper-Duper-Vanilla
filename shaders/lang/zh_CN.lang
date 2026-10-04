@@ -10,8 +10,8 @@ profile.MEDIUM = 中（默认）
 profile.HIGH = 高
 profile.ULTRA = 超高
 
-screen.DEBUG = Super Duper Vanilla v1.3.8
-screen.DEBUG.comment = §b开发: §2Eldeston§f§r, 呈现: §9FlameRender (C) §9Studios. §e单击我打开光影调试设置! 内含颜色模式和噪波速度选项.
+screen.DEBUG = HyperDuper Vanilla v1.0.0
+screen.DEBUG.comment = §dHyperDuper Vanilla v1.0.0 §7由 §6@porkyoot (Étoile)§7 制作\n(基于 §2Eldeston§7 与 §9FlameRender Studios§7 的 §bSuper Duper Vanilla§7 分支).\n\n§e[关于] §f采用 AI 协作编程进行高速光影算法探索.\n§e[状态] §f按原样提供，不提供任何担保.\n§a[性能: 无] §f单击以打开调试选项.
     option.COLOR_MODE = 颜色模式
     option.COLOR_MODE.comment = 更改反照率颜色的模式.
         value.COLOR_MODE.0 = 关
@@ -21,6 +21,13 @@ screen.DEBUG.comment = §b开发: §2Eldeston§f§r, 呈现: §9FlameRender (C) 
 
     option.NOISE_SPEED = 噪波速度
     option.NOISE_SPEED.comment = 更改时域噪波的速度
+
+    option.VOXY_DEBUG = Voxy LOD 调试
+    option.VOXY_DEBUG.comment = 用于检查 Voxy LOD 地形对齐和差异的仪表覆盖层.
+        value.VOXY_DEBUG.0 = 关
+        value.VOXY_DEBUG.1 = 边界
+        value.VOXY_DEBUG.2 = 光照贴图 UV
+        value.VOXY_DEBUG.3 = 法线
 
 screen.POST = 后期处理
 screen.POST.comment = §6后期处理效果, 如描边, 抗锯齿, 复古滤镜和图像锐化.
@@ -35,6 +42,16 @@ screen.POST.comment = §6后期处理效果, 如描边, 抗锯齿, 复古滤镜�
 
     option.OUTLINE_PIXEL_SIZE = 描边像素尺寸
     option.OUTLINE_PIXEL_SIZE.comment = 描边的像素尺寸. 调整以改变描边的厚度.
+
+    option.TARGET_OUTLINE_MODE = 目标方块轮廓
+    option.TARGET_OUTLINE_MODE.comment = 目标方块选择边框的样式和渲染模式。\n\n§e[视觉] §f反色会反转线条下方的场景颜色（类似于原版准星/指示器），确保在任何背景下都清晰可见。黑色和白色提供经典的纯色边缘。\n§a[性能: 无] §f线条光栅化模式。\n§b[提示] §7推荐使用反色模式，在黑暗洞穴或明亮群系中均能获得最佳辨识度。
+        value.TARGET_OUTLINE_MODE.0 = 关
+        value.TARGET_OUTLINE_MODE.1 = 反色 (原版风格)
+        value.TARGET_OUTLINE_MODE.2 = 纯黑
+        value.TARGET_OUTLINE_MODE.3 = 纯白
+
+    option.TARGET_OUTLINE_THICKNESS = 目标方块轮廓宽度
+    option.TARGET_OUTLINE_THICKNESS.comment = 调整目标方块选择边框的屏幕像素宽度。\n\n§e[视觉] §f数值越大，边框越宽越清晰。\n§a[性能: 无] §f屏幕空间顶点挤出。\n§b[提示] §7推荐 2.0 到 2.5 像素，清晰明显且不遮挡方块细节。
 
     option.RETRO_FILTER = 复古滤镜
     option.RETRO_FILTER.comment = 启用复古滤镜. 在低渲染质量下效果最好.
@@ -160,6 +177,9 @@ screen.LIGHTING.comment = §6光照和阴影选项, 包括阴影映射, 实体�
     option.AMBIENT_LIGHTING = 环境光
     option.AMBIENT_LIGHTING.comment = 控制全局环境光照值. 如果你不喜欢漆黑一片就增加该值, 但过高的值会导致光照失真. 启用 SSGI 时设置为零以获得更真实的效果. 设置为 0.50 可获得夜视.
 
+    option.WEATHER_DIRECT_LIGHT = 恶劣天气直射光
+    option.WEATHER_DIRECT_LIGHT.comment = 恶劣天气（雨、雷暴）时来自太阳和月亮的直射光及阴影强度. 设置为 0.00 可完全消除雨天的硬边缘直射阴影.
+
     screen.RAY_TRACING = 光线追踪设置
     screen.RAY_TRACING.comment = §6光线追踪功能, 如 SSGI, SSR, 光线追踪步进, 及粗糙反射.
         option.SSGI = SSGI
@@ -182,11 +202,11 @@ screen.LIGHTING.comment = §6光照和阴影选项, 包括阴影映射, 实体�
 
 screen.ATMOSPHERICS = 大气系统
 screen.ATMOSPHERICS.comment = §6大气系统效果, 包括日月, 云, 雾, 边界雾, 及体积光.
-    option.SUN_MOON_TYPE = 日月样式
-    option.SUN_MOON_TYPE.comment = 更改太阳和月亮的样式.
-        value.SUN_MOON_TYPE.0 = 默认
-        value.SUN_MOON_TYPE.1 = 圆形
-        value.SUN_MOON_TYPE.2 = 原版
+    option.SUN_MOON_ROUNDNESS = 日月圆角
+    option.SUN_MOON_ROUNDNESS.comment = 调整天体、星星、彩虹/方彩虹、耀斑及末地闪光的圆角程度, 从正方形 (0.0) 到圆角 (0.5) 再到圆形 (1.0).
+        value.SUN_MOON_ROUNDNESS.0.00 = 方形
+        value.SUN_MOON_ROUNDNESS.0.50 = 圆角
+        value.SUN_MOON_ROUNDNESS.1.00 = 圆形
     
     option.CLOUD_TYPE = 云样式
     option.CLOUD_TYPE.comment = 更改云的样式.
@@ -196,6 +216,31 @@ screen.ATMOSPHERICS.comment = §6大气系统效果, 包括日月, 云, 雾, 边
 
     option.SUN_MOON_INTENSITY = 日月强度
     option.SUN_MOON_INTENSITY.comment = 太阳或月亮的强度.也会影响镜面反射.
+
+    option.SUN_MOON_SIZE = 日月大小
+    option.SUN_MOON_SIZE.comment = 调整天空中太阳、月亮和黑洞的大小。
+
+    option.GODRAYS = 丁达尔光线
+    option.GODRAYS.comment = 启用穿透地形、云层与水体的高性能丁达尔光线（云隙光/耶稣光）.
+
+    screen.GODRAY_SETTINGS = 丁达尔光线设置
+    screen.GODRAY_SETTINGS.comment = §6配置丁达尔光线采样质量、强度与水体透射.
+
+    option.GODRAYS_QUALITY = 丁达尔光线质量
+    option.GODRAYS_QUALITY.comment = 光线步进采样步数与密度. 极速: 6步 (最高帧率), 平衡: 8步 (推荐), 高: 12步, 极致: 16步.
+        value.GODRAYS_QUALITY.0 = 极速 (6步)
+        value.GODRAYS_QUALITY.1 = 平衡 (8步)
+        value.GODRAYS_QUALITY.2 = 高 (12步)
+        value.GODRAYS_QUALITY.3 = 极致 (16步)
+
+    option.GODRAYS_DENSITY = 丁达尔光线强度
+    option.GODRAYS_DENSITY.comment = 调节丁达尔光线的明亮程度与强度, 设置为零以禁用.
+
+    option.GODRAYS_WATER_TRANSMISSION = 水体透射
+    option.GODRAYS_WATER_TRANSMISSION.comment = 允许丁达尔光线穿透半透明水体和染色玻璃. 关闭此项可跳过二次深度采样以获得极致性能.
+
+    option.GODRAYS_ADAPTIVE_STEPS = 自适应步进
+    option.GODRAYS_ADAPTIVE_STEPS.comment = 靠近太阳时动态优化光线步进采样数，直视太阳时大幅提升帧率且画质无损。
 
     option.VOLUMETRIC_LIGHTING = 体积光
     option.VOLUMETRIC_LIGHTING.comment = 启用体积光.
@@ -208,6 +253,78 @@ screen.ATMOSPHERICS.comment = §6大气系统效果, 包括日月, 云, 雾, 边
 
     option.GROUND_FOG_STRENGTH = 地表雾强度
     option.GROUND_FOG_STRENGTH.comment = 薄雾/地表雾的强度.
+
+    option.MILKY_WAY = 银河
+    option.MILKY_WAY.comment = 在夜空中启用Minecraft风格的程序化银河, 包含方形星星和阶梯星云边缘.
+    option.MILKY_WAY_BRIGHTNESS = 银河亮度
+    option.MILKY_WAY_BRIGHTNESS.comment = 调整程序化银河的亮度.
+    option.AURORA = 极光
+    option.AURORA.comment = 在寒冷, 积雪和冰原生物群系中启用体积感像素风格的舞动相交垂直极光帷幔. 拥有类似云层的像素化质感, 颜色自顶部的粉红过渡到中部的翠绿及底部的电蓝色.
+    option.AURORA_BRIGHTNESS = 极光亮度
+    option.AURORA_BRIGHTNESS.comment = 调整体积极光帷幔的亮度.
+    option.RAINBOW = 彩虹
+    option.RAINBOW.comment = 在下雨且天空未完全阴沉时启用程序化双彩虹 (或方彩虹). 白天出现于太阳对侧, 夜间出现于月亮对侧, 包含鲜艳的主虹与较暗的外层副虹. 遵循日月圆角设置.
+    option.RAINBOW_BRIGHTNESS = 彩虹亮度
+    option.RAINBOW_BRIGHTNESS.comment = 调整双彩虹的亮度.
+
+    option.METEORS = 流星雨
+    option.METEORS.comment = 在夜空中启用动态程序化流星雨. 流星拥有动态爆发波次, 不同的尺寸和寿命 (1至3秒), 带有清晰的像素头部和渐隐的绚丽蓝色彗尾.
+
+    screen.METEOR_SETTINGS = 流星雨设置
+    screen.METEOR_SETTINGS.comment = §e自定义流星雨出现频率, 活动波次, 飞行速度, 彗尾长度, 粗细, 头部大小及色彩配置.
+        option.METEOR_RARITY = 流星出现频率
+        option.METEOR_RARITY.comment = 决定夜间流星雨出现的频率. 稀有设置让流星雨成为特殊的周期性天文事件, 而不是每晚都出现.
+        value.METEOR_RARITY.0 = 每晚出现
+        value.METEOR_RARITY.1 = 频繁 (每2-3晚)
+        value.METEOR_RARITY.2 = 常规 (每4-5晚)
+        value.METEOR_RARITY.3 = 稀有 (每7-8晚)
+        value.METEOR_RARITY.4 = 极罕见 (每12-15晚)
+        value.METEOR_RARITY.5 = 朔月之夜 (新月)
+        option.METEOR_SHOWER_STRENGTH = 爆发频率
+        option.METEOR_SHOWER_STRENGTH.comment = 调整流星雨期间的流星生成频率与爆发强度.
+        option.METEOR_BRIGHTNESS = 流星亮度
+        option.METEOR_BRIGHTNESS.comment = 调整流星及其发光彗尾的亮度.
+        option.METEOR_SPEED = 飞行速度
+        option.METEOR_SPEED.comment = 调整流星划过天球的速度.
+        option.METEOR_TAIL_LENGTH = 彗尾长度
+        option.METEOR_TAIL_LENGTH.comment = 调整流星身后发光彗尾的拖尾长度.
+        option.METEOR_SIZE = 流星尺寸
+        option.METEOR_SIZE.comment = 调整流星的整体粗细.
+        option.METEOR_HEAD_SIZE = 流星头部尺寸
+        option.METEOR_HEAD_SIZE.comment = 调整流星头部相对于尾迹的比例大小. 较高的数值使发光的前端像素头部更加明显.
+        option.METEOR_TRAIL_FADE = 彗尾锐度
+        option.METEOR_TRAIL_FADE.comment = 调整彗尾的渐隐锐度. 较高的数值可产生更加汇聚, 锐利的彗尾.
+        option.METEOR_COLOR_PROFILE = 色彩配置
+        option.METEOR_COLOR_PROFILE.comment = 更改夜空中流星的色彩调色板.
+        value.METEOR_COLOR_PROFILE.0 = 电光蓝
+        value.METEOR_COLOR_PROFILE.1 = 宇宙紫
+        value.METEOR_COLOR_PROFILE.2 = 翡翠绿
+        value.METEOR_COLOR_PROFILE.3 = 琥珀金
+        value.METEOR_COLOR_PROFILE.4 = 钻石白
+        value.METEOR_COLOR_PROFILE.5 = 棱镜多彩
+        option.METEOR_WAVE_VARIATION = 活动模式
+        option.METEOR_WAVE_VARIATION.comment = 流星生成模式. 恒定保持持续平稳的流星流; 动态波次则产生周期性的平稳期与集中爆发波次.
+        value.METEOR_WAVE_VARIATION.0 = 恒定平稳
+        value.METEOR_WAVE_VARIATION.1 = 动态波次
+        option.METEOR_SKY_COVERAGE = 天空分布范围
+        option.METEOR_SKY_COVERAGE.comment = 流星在夜空中的分布范围. 全天域允许流星划过整片天空 (包括南方). 定向流聚焦在天顶至南方路径. 辐射点集中在发散原点附近.
+        value.METEOR_SKY_COVERAGE.0 = 全天域
+        value.METEOR_SKY_COVERAGE.1 = 定向流
+        value.METEOR_SKY_COVERAGE.2 = 聚焦辐射点
+        option.METEOR_RADIANT_SPREAD = 辐射点范围
+        option.METEOR_RADIANT_SPREAD.comment = 调整天空中所有流星径向发散起始区域的角尺寸.
+        option.METEOR_RADIANT_DIRECTION = 辐射点方向
+        option.METEOR_RADIANT_DIRECTION.comment = 流星如车窗落雪般向外径向发散的天空原点方向.
+        value.METEOR_RADIANT_DIRECTION.0 = 东北方
+        value.METEOR_RADIANT_DIRECTION.1 = 西北方
+        value.METEOR_RADIANT_DIRECTION.2 = 东南方
+        value.METEOR_RADIANT_DIRECTION.3 = 西南方
+        value.METEOR_RADIANT_DIRECTION.4 = 天顶
+        value.METEOR_RADIANT_DIRECTION.5 = 天球星轨
+    option.STAR_ROTATION = 星星旋转
+    option.STAR_ROTATION.comment = 星星旋转样式. 对齐保持所有方形星星对齐天球网格. 随机赋予每颗星星单独的随机旋转角度. 同时应用于银河与夜空.
+    value.STAR_ROTATION.0 = 对齐
+    value.STAR_ROTATION.1 = 随机
 
     screen.CLOUD_SETTINGS = 云设置
     screen.CLOUD_SETTINGS.comment = §e云渲染选项, 如第二云层, 动态云层, 及云质量/深度.
@@ -222,6 +339,22 @@ screen.ATMOSPHERICS.comment = §6大气系统效果, 包括日月, 云, 雾, 边
 
         option.SECOND_CLOUD_HEIGHT = 第二云层高度
         option.SECOND_CLOUD_HEIGHT.comment = 第二层云的高度, 仅在双层云启用时有效.
+
+        option.DYNAMIC_WEATHER = 动态天气
+        option.DYNAMIC_WEATHER.comment = 启用程序化动态天气系统, 阴天覆盖度随时间自然起伏, 呈现完全无云的晴朗昼夜至漫天阴云的阴雨天气. 下雨时天空亦可呈现部分多云状态.
+
+        option.STATIC_OVERCAST = 静态阴天程度
+        option.STATIC_OVERCAST.comment = 当禁用程序化动态天气时, 将阴天覆盖度参数设定为固定值.\n\n§e[视觉] §f将云层覆盖度与阴天氛围锁定在常驻水平.\n§a[性能: 无影响] §f固定标量.\n§b[提示] §7设为 0.40–0.60 可在原版降雨时呈现明媚的晴雨天气与彩虹!
+            value.STATIC_OVERCAST.-1.00 = 动态 (原版)
+            value.STATIC_OVERCAST.0.00 = 0% (晴空)
+            value.STATIC_OVERCAST.0.50 = 50%
+            value.STATIC_OVERCAST.1.00 = 100% (阴云密布)
+
+        option.STORY_MODE_CLOUDS = 故事模式
+        option.STORY_MODE_CLOUDS.comment = 使云层更加柔和，采用从底部不透明到顶部透明的垂直渐变，并增加厚度。
+
+        option.SOFT_CLOUD_EDGE = 柔和边缘
+        option.SOFT_CLOUD_EDGE.comment = 平滑并圆润云层边缘，而非呈现生硬的方块边缘。
 
         option.VOLUMETRIC_CLOUD_STEPS = 体积云步进
         option.VOLUMETRIC_CLOUD_STEPS.comment = 故事模式云步进次数. 增加可能提升云的质量且需要更多性能.
@@ -326,6 +459,11 @@ screen.PBR.comment = §6基于物理的渲染选项, 含PBR模式, 高光反射,
     screen.IPBR_SETTINGS.comment = §e高级材质设置, 含水, 熔岩, 幽匿, 及法线生成.
         screen.WATER_SETTINGS = 水体材质设置
         screen.WATER_SETTINGS.comment = §b水体材质属性, 如噪波, 亮度, 法线贴图, 模糊, 深度, 波纹, 吸光, 泡沫, 及纯色.
+            option.WATER_STYLE = 水体风格
+            option.WATER_STYLE.comment = 选择水体呈现风格 (原版或写实).
+            value.WATER_STYLE.0 = 写实
+            value.WATER_STYLE.1 = 原版
+
             option.WATER_NOISE = 水面噪波
             option.WATER_NOISE.comment = 控制水体表面的噪波数量/变形程度.
 
@@ -381,6 +519,8 @@ screen.PBR.comment = §6基于物理的渲染选项, 含PBR模式, 高光反射,
         option.NORMAL_GENERATION_RESOLUTION = 自动生成法线分辨率
         option.NORMAL_GENERATION_RESOLUTION.comment = 设置自动生成法线贴图的分辨率.
 
+screen.DIMENSIONS = 维度
+screen.DIMENSIONS.comment = §6维度和环境配置, 含主世界, 下界, 末地, 及雾设置.
 screen.CONFIGURATION = 配置
 screen.CONFIGURATION.comment = §6维度和环境配置, 含主世界, 下界, 末地, 及雾设置.
     screen.OVERWORLD_SETTINGS = 主世界设置
@@ -477,6 +617,12 @@ screen.CONFIGURATION.comment = §6维度和环境配置, 含主世界, 下界, �
             option.FOG0_TOTAL_DENSITY = 总体密度
             option.FOG0_TOTAL_DENSITY.comment = 主世界的总体雾密度. 值越高 = 雾越厚.
 
+            option.DYNAMIC_FOG = 动态迷雾
+            option.DYNAMIC_FOG.comment = 启用随动态天气系统演变并基于生物群系湿度概率的动态迷雾. 沼泽、河流与雨林等高湿度群系更容易产生浓郁晨雾与漫布薄雾, 干燥群系则保持通透清朗.
+
+            option.PALE_GARDEN_FOG = 苍白之园迷雾
+            option.PALE_GARDEN_FOG.comment = 苍白之园生物群系中的浅灰色大气迷雾强度.
+
     screen.NETHER_SETTINGS = 下界设置
     screen.NETHER_SETTINGS.comment = §c下界雾和天空的颜色配置.
         option.FOGn1_VERTICAL_DENSITY = 垂直密度
@@ -514,11 +660,20 @@ screen.CONFIGURATION.comment = §6维度和环境配置, 含主世界, 下界, �
         option.SKY1_CI = 天空强度
         option.SKY1_CI.comment = 末地天空颜色的强度.
 
+        option.WORLD1_CUSTOM_SKYLIGHT = 天空光照
+        option.WORLD1_CUSTOM_SKYLIGHT.comment = 末地维度的天空光照亮度.
+
+        option.END_BH_LIGHT = 黑洞光照
+        option.END_BH_LIGHT.comment = 黑洞发出的持久而微弱的定向光照强度.
+
         option.FOG1_VERTICAL_DENSITY = 垂直密度
         option.FOG1_VERTICAL_DENSITY.comment = 末地的垂直雾密度. 值越高 = 高高度雾越薄, 低高度越厚.
 
         option.FOG1_TOTAL_DENSITY = 总体密度
         option.FOG1_TOTAL_DENSITY.comment = 末地的总体雾密度. 值越高 = 雾越厚.
+
+        option.END_BOSS_FOG = 末影龙Boss迷雾
+        option.END_BOSS_FOG.comment = 末影龙战斗期间的大气Boss迷雾强度.
 
     screen.BLOCK_LIGHT_COLOR = 方块光设置
     screen.BLOCK_LIGHT_COLOR.comment = §e方块光的颜色和强度配置.

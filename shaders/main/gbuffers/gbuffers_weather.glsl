@@ -34,16 +34,13 @@
             #include "/lib/utility/taaJitter.glsl"
         #endif
 
+        uniform vec3 cameraPosition;
+        uniform mat4 gbufferModelView;
+        uniform mat4 gbufferModelViewInverse;
+
         #ifdef WEATHER_ANIMATION
             uniform float rainStrength;
-
             uniform float vertexFrameTime;
-
-            uniform vec3 cameraPosition;
-
-            uniform mat4 gbufferModelView;
-            uniform mat4 gbufferModelViewInverse;
-
             #include "/lib/vertex/weatherWave.glsl"
         #endif
 
@@ -56,10 +53,18 @@
             // Get vertex view position
             vec3 vertexViewPos = mat3(gl_ModelViewMatrix) * gl_Vertex.xyz + gl_ModelViewMatrix[3].xyz;
 
-            #ifdef WEATHER_ANIMATION
-                // Get vertex eye player position
-                vec3 vertexEyePlayerPos = mat3(gbufferModelViewInverse) * vertexViewPos;
+            // Get vertex eye player position
+            vec3 vertexEyePlayerPos = mat3(gbufferModelViewInverse) * vertexViewPos;
 
+            // No rain above the clouds (cloud base ~192.0):
+            // Cull entire rain rendering if player is flying above clouds or if particles are above cloud altitude
+            float vertexWorldPosY = vertexEyePlayerPos.y + gbufferModelViewInverse[3].y + cameraPosition.y;
+            if(cameraPosition.y >= 192.0 || vertexWorldPosY >= 192.0){
+                gl_Position = vec4(-10.0);
+                return;
+            }
+
+            #ifdef WEATHER_ANIMATION
                 // Get vertex feet player position
                 vec2 vertexFeetPlayerPosXZ = vertexEyePlayerPos.xz + gbufferModelViewInverse[3].xz;
                 // Get vertex world position
@@ -94,8 +99,9 @@
             discard; return;
         }
     #else
-        /* RENDERTARGETS: 4 */
+        /* RENDERTARGETS: 4,3 */
         layout(location = 0) out vec4 sceneColOut; // colortex4
+        layout(location = 1) out vec3 weatherMatOut; // colortex3
 
         flat in float lmCoordX;
 
@@ -110,11 +116,24 @@
             uniform float dayCycle;
         #endif
 
-        #ifdef WORLD_VANILLA_FOG_COLOR
+        #if defined WORLD_VANILLA_FOG_COLOR || !defined FORCE_DISABLE_WEATHER
             uniform vec3 fogColor;
+        #endif
+
+        #ifndef FORCE_DISABLE_WEATHER
+            uniform float rainStrength;
+            uniform float weatherFade;
+        #endif
+
+        #ifndef CAMERA_POSITION_DECLARED
+            #define CAMERA_POSITION_DECLARED
+            uniform vec3 cameraPosition;
         #endif
         
         void main(){
+            // No rain above the clouds
+            if(cameraPosition.y >= 192.0){ discard; return; }
+
             // Get albedo color
             vec4 albedo = textureLod(gtexture, texCoord, 0);
 
@@ -124,11 +143,17 @@
             // Convert to linear space
             albedo.rgb = toLinear(albedo.rgb);
 
-            vec3 totalDiffuse = toLinear(SKY_COLOR_DATA_BLOCK) + toLinear(lmCoordX * blockLightColor) + toLinear(AMBIENT_LIGHTING + nightVision * 0.5);
+            #ifndef FORCE_DISABLE_WEATHER
+                vec3 skyLightDiffuse = mix(toLinear(SKY_COLOR_DATA_BLOCK), vec3(dot(toLinear(fogColor), vec3(0.2126, 0.7152, 0.0722))), weatherFade);
+            #else
+                vec3 skyLightDiffuse = toLinear(SKY_COLOR_DATA_BLOCK);
+            #endif
+            vec3 totalDiffuse = skyLightDiffuse + toLinear(lmCoordX * blockLightColor) + toLinear(AMBIENT_LIGHTING + nightVision * 0.5);
 
-            totalDiffuse += lightningFlash;
+            totalDiffuse += toLinear(mix(vec3(1.0), LIGHTNING_COLOR, 0.20)) * lightningFlash;
 
             sceneColOut = vec4(albedo.rgb * totalDiffuse, albedo.a);
+            weatherMatOut = vec3(albedo.a, 0.0, 1.0);
         }
     #endif
 #endif

@@ -4,6 +4,9 @@
 #define OUTLINE_BRIGHTNESS 1.00 // Outline brightness. Set it to -1 for black outlines, or 1 to highlighted outlines. [-1.00 -0.95 -0.90 -0.85 -0.80 -0.75 -0.70 -0.65 -0.60 -0.55 -0.50 -0.45 -0.40 -0.35 -0.30 -0.25 -0.20 -0.15 -0.10 -0.05 0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00]
 #define OUTLINE_PIXEL_SIZE 1 // Outline pixel size. Adjust to change the thickness of the outlines [1 2 4 8 16 32 64]
 
+#define TARGET_OUTLINE_MODE 1 // Targeted block outline mode. Inverted inverts the scene color beneath it for maximum visibility, like vanilla indicators. [0 1 2 3]
+#define TARGET_OUTLINE_THICKNESS 2.0 // Targeted block outline thickness in screen pixels. [1.0 1.5 2.0 2.5 3.0 3.5 4.0 5.0]
+
 // #define RETRO_FILTER // Enable retro filter. Works best at low render quality.
 
 #define ANTI_ALIASING 2 // Enables anti-aliasing. FXAA is fast and works with screenshot sizes. TAA is slower, doesn't work with custom screenshots, but smooths noise. Disable anti-aliasing on your shader menu before using this feature! [0 1 2 3]
@@ -60,13 +63,14 @@ const float sunPathRotation = 30.0; // Light path angle. This also affects sky a
 #define UNDERWATER_CAUSTICS 1 // Enables underwater caustics. Shadow color must be enabled! [0 1 2]
 #define SSAO // Enables screenspace ambient occlusion.
 #define AMBIENT_LIGHTING 0.05 // Overall ambient lighting value. Increase if you dislike the pitch black darkness, higher values may make lighting unrealistic. Set it to zero for a more realistic approach if you have SSGI enabled. Set it to 0.50 for nightvision. [0.00 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.10 0.11 0.12 0.13 0.14 0.15 0.16 0.17 0.18 0.19 0.20 0.21 0.22 0.23 0.24 0.25 0.26 0.27 0.28 0.29 0.30 0.31 0.32 0.33 0.34 0.35 0.36 0.37 0.38 0.39 0.40 0.41 0.42 0.43 0.44 0.45 0.46 0.47 0.48 0.49 0.50]
+#define WEATHER_DIRECT_LIGHT 0.00 // Direct lighting and shadow strength from the sun and moon during bad weather (rain and thunder). [0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00]
 
 /// -------------------------------- /// Ray tracing settings /// -------------------------------- ///
 
 // #define SSGI // Enables screen space global illumination. May improve the ambience of dark areas despite the noisiness. Currently experimental and unoptimized. Turn on TAA for best results.
 #define SSR // Enables screen space global reflections. May improve the reflections of smooth objects using PBR.
 
-#define RAYTRACER_STEPS 20 // Raytracer steps. Increasing may improve quality and demand more performance. [16 20 24 28 32]
+#define RAYTRACER_STEPS 16 // Raytracer steps. Increasing may improve quality and demand more performance. [8 12 16 20 24 28 32]
 #define RAYTRACER_BISTEPS 2 // Raytracer binary refinement steps. Improves quality especially when using a low step count. Balancing the values may be necessary for performance.  [0 2 4 6 8]
 
 // #define ROUGH_REFLECTIONS // Enables rougher objects to have rougher reflections. May show weird artifacts, but some AA might fix it.
@@ -74,22 +78,78 @@ const float sunPathRotation = 30.0; // Light path angle. This also affects sky a
 
 /// -------------------------------- /// Atmospherics /// -------------------------------- ///
 
-#define SUN_MOON_TYPE 0 // Changes sun and moon type [0 1 2]
+#define SUN_MOON_ROUNDNESS 0.00 // Roundness of sun, moon, stars, rainbow/rainsquare, black hole, flares, and end flashes. 0.00 is perfect square, 0.50 is rounded, 1.00 is circle. [0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00]
 #define SUN_MOON_INTENSITY 4 // The sun or moon's intensity. Also affects specular reflections. [0 1 2 3 4 5 6 7 8]
+#define SUN_MOON_SIZE 0.10 // Size of sun, moon, and black hole in the sky. [0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50]
 
 #define VOLUMETRIC_LIGHTING // Enables volumetric lighting.
 #define VOLUMETRIC_LIGHTING_STRENGTH 0.50 // The strength of volumetric lighting, set it to zero to disable it [0.00 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.10 0.11 0.12 0.13 0.14 0.15 0.16 0.17 0.18 0.19 0.20 0.21 0.22 0.23 0.24 0.25 0.26 0.27 0.28 0.29 0.30 0.31 0.32 0.33 0.34 0.35 0.36 0.37 0.38 0.39 0.40 0.41 0.42 0.43 0.44 0.45 0.46 0.47 0.48 0.49 0.50 0.51 0.52 0.53 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62 0.63 0.64 0.65 0.66 0.67 0.68 0.69 0.70 0.71 0.72 0.73 0.74 0.75 0.76 0.77 0.78 0.79 0.80 0.81 0.82 0.83 0.84 0.85 0.86 0.87 0.88 0.89 0.90 0.91 0.92 0.93 0.94 0.95 0.96 0.97 0.98 0.99 1.00]
+#define GODRAYS // Enables performant atmospheric godrays from the sun and moon streaming through terrain, clouds, and water.
+#define GODRAYS_QUALITY 1 // Godray raymarching sample quality: 0: Fast (6 steps), 1: Balanced (8 steps), 2: High (12 steps), 3: Ultra (16 steps). [0 1 2 3]
+#define GODRAYS_DENSITY 0.50 // The density/brightness of godrays, set it to zero to disable it [0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00 1.10 1.20 1.30 1.40 1.50 1.60 1.70 1.80 1.90 2.00]
+#define GODRAYS_WATER_TRANSMISSION 0 // Allows godrays to penetrate and stream through translucent water and glass. 0: Off (maximum performance), 1: On. [0 1]
+#define GODRAYS_ADAPTIVE_STEPS 1 // Dynamically adjusts raymarching step count based on distance to the sun for higher FPS with zero visual difference. 0: Off, 1: On. [0 1]
 #define BORDER_FOG // Enables border fog to cover world edges
 #define GROUND_FOG_STRENGTH 0.50 // The strength of mist/ground fog. [0.00 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.10 0.11 0.12 0.13 0.14 0.15 0.16 0.17 0.18 0.19 0.20 0.21 0.22 0.23 0.24 0.25 0.26 0.27 0.28 0.29 0.30 0.31 0.32 0.33 0.34 0.35 0.36 0.37 0.38 0.39 0.40 0.41 0.42 0.43 0.44 0.45 0.46 0.47 0.48 0.49 0.50 0.51 0.52 0.53 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62 0.63 0.64 0.65 0.66 0.67 0.68 0.69 0.70 0.71 0.72 0.73 0.74 0.75 0.76 0.77 0.78 0.79 0.80 0.81 0.82 0.83 0.84 0.85 0.86 0.87 0.88 0.89 0.90 0.91 0.92 0.93 0.94 0.95 0.96 0.97 0.98 0.99 1.00]
+#define DYNAMIC_FOG // Enables dynamic fog with biome probabilities depending on humidity and following the dynamic weather system.
 #define SKYBOX_BRIGHTNESS 1.00 // Sky box brightness. [0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00 1.05 1.10 1.15 1.20 1.25 1.30 1.35 1.40 1.45 1.50 1.55 1.60 1.65 1.70 1.75 1.80 1.85 1.90 1.95 2.00]
+
+#define MILKY_WAY // Enables procedural Minecraft-style Milky Way in the night sky.
+#define MILKY_WAY_BRIGHTNESS 1.00 // Milky Way brightness. [0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00 1.10 1.20 1.30 1.40 1.50 1.60 1.70 1.80 1.90 2.00]
+#define AURORA // Enables volumetric pixelized aurora curtains in cold and snowy biomes.
+#define AURORA_BRIGHTNESS 1.00 // Aurora brightness. [0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00 1.10 1.20 1.30 1.40 1.50 1.60 1.70 1.80 1.90 2.00]
+#define RAINBOW // Enables procedural double rainbow / rainsquare when raining and not totally overcast.
+#define RAINBOW_BRIGHTNESS 1.00 // Rainbow brightness. [0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00 1.10 1.20 1.30 1.40 1.50 1.60 1.70 1.80 1.90 2.00 2.25 2.50 2.75 3.00 3.50 4.00]
+#define METEORS // Enables dynamic procedural meteor showers in the night sky.
+#define METEOR_RARITY 2 // Meteor shower occurrence frequency. 0: Every Night, 1: Frequent (Every 2-3 Nights), 2: Regular (Every 4-5 Nights), 3: Rare (Every 7-8 Nights), 4: Very Rare (Every 12-15 Nights), 5: Lunar Cycle (New Moon). [0 1 2 3 4 5]
+#define METEOR_SHOWER_STRENGTH 1.00 // Meteor shower activity rate and frequency. [0.25 0.50 0.75 1.00 1.25 1.50 1.75 2.00 2.50 3.00]
+#define METEOR_BRIGHTNESS 1.00 // Meteor brightness. [0.00 0.25 0.50 0.75 1.00 1.25 1.50 1.75 2.00]
+#define METEOR_SPEED 1.00 // Meteor flight speed multiplier. [0.50 0.75 1.00 1.25 1.50 1.75 2.00]
+#define METEOR_TAIL_LENGTH 1.00 // Meteor tail length multiplier. [0.50 0.75 1.00 1.25 1.50 1.75 2.00 2.50]
+#define METEOR_SIZE 1.00 // Meteor thickness (overall size multiplier). [0.50 0.75 1.00 1.25 1.50 1.75 2.00]
+#define METEOR_HEAD_SIZE 1.75 // Meteor head size multiplier relative to tail. [1.00 1.25 1.50 1.75 2.00 2.25 2.50 3.00]
+#define METEOR_TRAIL_FADE 1.00 // Meteor tail fade sharpness. Higher values produce a more concentrated, crisp tail. [0.50 0.75 1.00 1.25 1.50 1.75 2.00]
+#define METEOR_COLOR_PROFILE 0 // Meteor color palette. 0: Electric Blue, 1: Cosmic Violet, 2: Emerald Green, 3: Amber Gold, 4: Diamond White, 5: Prismatic. [0 1 2 3 4 5]
+#define METEOR_WAVE_VARIATION 1 // Meteor activity mode. 0: Constant rate, 1: Dynamic shower waves with peaks and lulls. [0 1]
+#define METEOR_SKY_COVERAGE 0 // Meteor sky distribution. 0: Full Sky (Streaks across whole sky including South), 1: Directional Stream (Zenith & South corridor), 2: Radiant Focused (Clustered near radiant area). [0 1 2]
+#define METEOR_RADIANT_SPREAD 0.08 // Radiant origin area size (angular radius in sky). [0.02 0.04 0.06 0.08 0.10 0.12 0.15 0.20]
+#define METEOR_RADIANT_DIRECTION 0 // Radiant origin location. 0: North-East, 1: North-West, 2: South-East, 3: South-West, 4: Zenith (Overhead), 5: Celestial. [0 1 2 3 4 5]
+#define STAR_ROTATION 0 // Star rotation mode. Aligned keeps all square stars axis-aligned. Random rotates each star at an individual random angle. [0 1]
+
+/// -------------------------------- /// Lightning and Flashes /// -------------------------------- ///
+
+// #define EPILEPSY_SAFETY // [WARNING: FLASHING LIGHTS] Enables photosensitivity and epilepsy safety mode. Completely disables all flashing lights, lightning flashes, cloud glows, End dimension flashes, and strobing effects across the entire shader pack.
+#define LIGHTNING_FLASH 1 // Lightning flash rendering mode. 0: Off, 1: Realistic Short (fast punchy decay), 2: Smooth Fade. [0 1 2]
+#define LIGHTNING_STROBE // Enables subtle atmospheric multi-stroke strobe effect that occurs on some lightning strikes.
+#define CLOUD_LIGHTNING // Enables cloud-to-cloud atmospheric visual lightning during storms. Faithful to vanilla geometric segmented style with branching details and zero noise/sound.
+#define CLOUD_LIGHTNING_BRANCHES 2 // Branching detail level for cloud-to-cloud lightning. 1: Classic, 2: Detailed, 3: Intricate Spider. [1 2 3]
+#define CLOUD_LIGHTNING_GLOW 1.00 // Intensity of internal flashing glows that light up clouds from within. [0.00 0.25 0.50 0.75 1.00 1.25 1.50 1.75 2.00]
+#define CLOUD_LIGHTNING_FREQUENCY 1.00 // Frequency multiplier of cloud-to-cloud lightning during storms. [0.25 0.50 0.75 1.00 1.25 1.50 2.00]
+
+#define LIGHTNING_COLOR_R 240 // Red lightning color component [3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99 102 105 108 111 114 117 120 123 126 129 132 135 138 141 144 147 150 153 156 159 162 165 168 171 174 177 180 183 186 189 192 195 198 201 204 207 210 213 216 219 222 225 228 231 234 237 240 243 246 249 252 255]
+#define LIGHTNING_COLOR_G 225 // Green lightning color component [3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99 102 105 108 111 114 117 120 123 126 129 132 135 138 141 144 147 150 153 156 159 162 165 168 171 174 177 180 183 186 189 192 195 198 201 204 207 210 213 216 219 222 225 228 231 234 237 240 243 246 249 252 255]
+#define LIGHTNING_COLOR_B 255 // Blue lightning color component [3 6 9 12 15 18 21 24 27 30 33 36 39 42 45 48 51 54 57 60 63 66 69 72 75 78 81 84 87 90 93 96 99 102 105 108 111 114 117 120 123 126 129 132 135 138 141 144 147 150 153 156 159 162 165 168 171 174 177 180 183 186 189 192 195 198 201 204 207 210 213 216 219 222 225 228 231 234 237 240 243 246 249 252 255]
+
+#ifdef EPILEPSY_SAFETY
+    #undef LIGHTNING_FLASH
+    #define LIGHTNING_FLASH 0
+    #undef LIGHTNING_STROBE
+    #undef CLOUD_LIGHTNING
+    #undef CLOUD_LIGHTNING_GLOW
+    #define CLOUD_LIGHTNING_GLOW 0.00
+#endif
 
 /// -------------------------------- /// Cloud settings /// -------------------------------- ///
 
 #define CLOUD_TYPE 2 // Changes cloud type. [0 1 2]
 #define DOUBLE_LAYERED_CLOUDS // Adds another layer of clouds (works on both vanilla and shader clouds), may use up performance.
 #define DYNAMIC_CLOUDS // Makes clouds more dynamic and allows weather to affect it. (affects on both vanilla and story mode clouds).
+#define DYNAMIC_WEATHER // Enables procedural dynamic weather and overcast system.
+#define STATIC_OVERCAST -1.00 // Overcast level when dynamic weather is off. -1.00 is dynamic vanilla rain, 0.00 to 1.00 is permanent overcast level. [-1.00 0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00]
+#define STORY_MODE_CLOUDS // Makes clouds softer with vertical fade gradient and thicker volume, reminiscent of Minecraft: Story Mode.
+//#define SOFT_CLOUD_EDGE // Makes cloud edges smooth and rounded instead of hard and blocky.
 #define FADE_SPEED 0.20 // Cloud fade speed [0.00 0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50 0.55 0.60 0.65 0.70 0.75 0.80 0.85 0.90 0.95 1.00 1.05 1.10 1.15 1.20 1.25 1.30 1.35 1.40 1.45 1.50 1.55 1.60 1.65 1.70 1.75 1.80 1.85 1.90 1.95 2.00 2.05 2.10 2.15 2.20 2.25 2.30 2.35 2.40 2.45 2.50 2.55 2.60 2.65 2.70 2.75 2.80 2.85 2.90 2.95 3.00 3.05 3.10 3.15 3.20 3.25 3.30 3.35 3.40 3.45 3.50 3.55 3.60 3.65 3.70 3.75 3.80 3.85 3.90 3.95 4.00]
-#define SECOND_CLOUD_HEIGHT 128.0 // 2nd layer cloud height, if double vanilla clouds is on [0.0 4.0 8.0 12.0 16.0 20.0 24.0 28.0 32.0 36.0 40.0 44.0 48.0 52.0 56.0 60.0 64.0 68.0 72.0 76.0 80.0 84.0 88.0 92.0 96.0 100.0 104.0 108.0 112.0 116.0 120.0 124.0 128.0 132.0 136.0 140.0 144.0 148.0 152.0 156.0 160.0 164.0 168.0 172.0 176.0 180.0 184.0 188.0 192.0 196.0 200.0 204.0 208.0 212.0 216.0 220.0 224.0 228.0 232.0 236.0 240.0 244.0 248.0 252.0 256.0]
+#define SECOND_CLOUD_HEIGHT 256.0 // High altitude cloud height [0.0 8.0 16.0 24.0 32.0 40.0 48.0 56.0 64.0 72.0 80.0 88.0 96.0 104.0 112.0 120.0 128.0 144.0 160.0 176.0 192.0 208.0 224.0 240.0 256.0 288.0 320.0 352.0 384.0 416.0 448.0 480.0 512.0]
 
 #define VOLUMETRIC_CLOUD_STEPS 16 // Story mode clouds steps. Increasing may improve quality and demand more performance. [16 32 64 128 256]
 #define VOLUMETRIC_CLOUD_DEPTH 8.0 // Determines the story mode clouds' thickness. [4.0 6.0 8.0 10.0 12.0]
@@ -134,6 +194,7 @@ const float sunPathRotation = 30.0; // Light path angle. This also affects sky a
 
 /// -------------------------------- /// Water material settings /// -------------------------------- ///
 
+#define WATER_STYLE 1 // Water visual style. 0: Realistic (glassy reflections, high transparency), 1: Vanilla (rich vibrant color, softer reflections, higher opacity for modded wake/effect compatibility). [0 1]
 #define WATER_NOISE // Enables water noise. Varies the water brightness by noise similar to SDGP.
 #define WATER_BRIGHTNESS 1.00 // Water brightness, lower values mean deeper colors [0.00 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.10 0.11 0.12 0.13 0.14 0.15 0.16 0.17 0.18 0.19 0.20 0.21 0.22 0.23 0.24 0.25 0.26 0.27 0.28 0.29 0.30 0.31 0.32 0.33 0.34 0.35 0.36 0.37 0.38 0.39 0.40 0.41 0.42 0.43 0.44 0.45 0.46 0.47 0.48 0.49 0.50 0.51 0.52 0.53 0.54 0.55 0.56 0.57 0.58 0.59 0.60 0.61 0.62 0.63 0.64 0.65 0.66 0.67 0.68 0.69 0.70 0.71 0.72 0.73 0.74 0.75 0.76 0.77 0.78 0.79 0.80 0.81 0.82 0.83 0.84 0.85 0.86 0.87 0.88 0.89 0.90 0.91 0.92 0.93 0.94 0.95 0.96 0.97 0.98 0.99 1.00]
 
@@ -144,6 +205,7 @@ const float sunPathRotation = 30.0; // Light path angle. This also affects sky a
 
 #define WATER_STYLIZE_ABSORPTION // Enables stylized water absorption. Changes water color based on depth.
 #define WATER_FOAM // Enables water foam. Appears on the sides of most solid objects, including entities.
+#define WATER_DEPTH_WAVES // Reduces wave amplitude in shallow ponds and disables waves/foam on puddles or water rendered on solid blocks.
 // #define WATER_FLAT // Enables flat water albedo.
 
 /// -------------------------------- /// Lava material settings /// -------------------------------- ///
@@ -180,6 +242,7 @@ const vec3 blockLightColor = vec3(BLOCKLIGHT_R, BLOCKLIGHT_G, BLOCKLIGHT_B) * (B
 
 #define COLOR_MODE 0 // Albedo color mode. White mode makes everything white. Black mode makes everything black. Foliage mode shows only foliage colors. Keeps materials on. [0 1 2 3]
 #define NOISE_SPEED 8 // The speed in which the noise randomises each frame. Useful for TAA. This effect is visible only when TAA is enabled. [2 4 8 16 32]
+#define VOXY_DEBUG 0 // Voxy LOD debug instrumentation. 1: Chunk boundary highlight, 2: Lightmap UV, 3: Surface normals. [0 1 2 3]
 
 /// -------------------------------- /// Physics mod settings /// -------------------------------- ///
 
@@ -220,6 +283,9 @@ const float PHYSICS_NORMAL_STRENGTH = 0.6;
 #ifdef VOLUMETRIC_LIGHTING
 #endif
 
+#ifdef GODRAYS
+#endif
+
 #ifdef SPECULAR_HIGHLIGHTS
 #endif
 
@@ -257,3 +323,6 @@ const float worldCurvatureInv = 1.0 / WORLD_CURVATURE_SIZE;
 
 // Water tile size inverse
 const float waterTileSizeInv = 1.0 / WATER_TILE_SIZE;
+
+// Normalized lightning color (sRGB)
+const vec3 LIGHTNING_COLOR = vec3(float(LIGHTNING_COLOR_R), float(LIGHTNING_COLOR_G), float(LIGHTNING_COLOR_B)) * (1.0 / 255.0);

@@ -80,15 +80,24 @@ uint maxOf(in uvec2 x){ return max(x.x, x.y); }
 uint maxOf(in uvec3 x){ return max(x.x, max(x.y, x.z)); }
 uint maxOf(in uvec4 x){ return max(max(x.x, x.y), max(x.z, x.w)); }
 
-// Linear interpolation functions
+// Smooth interpolation functions (C1 continuous Hermite across the midpoint d=1.0)
+float smoothLerp(in float a, in float b, in float c, in float d){
+	if(d < 1.0) return mix(a, b, smoothstep(0.0, 1.0, d));
+	return mix(b, c, smoothstep(1.0, 2.0, d));
+}
+
+vec3 smoothLerp(in vec3 a, in vec3 b, in vec3 c, in float d){
+	if(d < 1.0) return mix(a, b, smoothstep(0.0, 1.0, d));
+	return mix(b, c, smoothstep(1.0, 2.0, d));
+}
+
+// Linear interpolation functions (aliased to smoothLerp for seamless transitions)
 float lerp(float a, float b, float c, float d){
-	if(d < 1) return mix(a, b, d);
-    return mix(b, c, d - 1.0);
+	return smoothLerp(a, b, c, d);
 }
 
 vec3 lerp(vec3 a, vec3 b, vec3 c, float d){
-	if(d < 1) return mix(a, b, d);
-    return mix(b, c, d - 1.0);
+	return smoothLerp(a, b, c, d);
 }
 
 // Hermite interpolation
@@ -196,20 +205,4 @@ vec3 toLinear(in vec3 x){ return ((2.10545 + x) * (0.0231872 + x)) * x * 0.31520
 float toSRGB(in float x){ return (inversesqrt(x) - 0.126893) * x * 1.14374; }
 vec3 toSRGB(in vec3 x){ return (inversesqrt(x) - 0.126893) * x * 1.14374; }
 
-/*
-// SRGB to linear
-float toLinear(in float x){ return pow(x, vec3(2.2)); }
-vec3 toLinear(in vec3 x){ return pow(x, 2.2); }
-
-// Linear to sRGB
-float toSRGB(in float x){ return pow(x, vec3(1.0 / 2.2)); }
-vec3 toSRGB(in vec3 x){ return pow(x, 1.0 / 2.2); }
-
-// SRGB to linear
-float toLinear(in float x){ return ((2.10545 + x) * (0.0231872 + x)) * x * 0.315206; }
-vec3 toLinear(in vec3 x){ return ((2.10545 + x) * (0.0231872 + x)) * x * 0.315206; }
-
-// Linear to SRGB
-float toSRGB(in float x){ return (inversesqrt(x) - 0.126893) * x * 1.14374; }
-vec3 toSRGB(in vec3 x){ return (inversesqrt(x) - 0.126893) * x * 1.14374; }
-*/
+#include "/lib/utility/bitPacking.glsl"

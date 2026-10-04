@@ -179,6 +179,7 @@
 
     #ifndef FORCE_DISABLE_WEATHER
         uniform float rainStrength;
+        uniform float weatherFade;
     #endif
 
     #if defined SHADOW_FILTER && ANTI_ALIASING >= 2
@@ -190,7 +191,7 @@
         uniform float twilightPhase;
     #endif
 
-    #ifdef WORLD_VANILLA_FOG_COLOR
+    #if defined WORLD_VANILLA_FOG_COLOR || !defined FORCE_DISABLE_WEATHER
         uniform vec3 fogColor;
     #endif
 
@@ -280,6 +281,14 @@
 
         // Write to HDR scene color
         sceneColOut = complexShadingForward(material);
+
+        #if VOXY_DEBUG == 1
+            sceneColOut = mix(sceneColOut, vec3(0.2, 0.8, 1.0), 0.15);
+        #elif VOXY_DEBUG == 2
+            sceneColOut = vec3(lmCoord.x, lmCoord.y, 0.0);
+        #elif VOXY_DEBUG == 3
+            sceneColOut = material.normal * 0.5 + 0.5;
+        #endif
 
         // Write buffer datas
         normalDataOut = material.normal;

@@ -77,10 +77,14 @@
     uniform int entityId;
 
     void main(){
-        const vec3 lightingCol = vec3(0.25 * EMISSIVE_INTENSITY, 0.5 * EMISSIVE_INTENSITY, EMISSIVE_INTENSITY);
-
-        // Write to HDR scene color
-        if(entityId == 10129) sceneColOut = vertexColor.rgb * lightingCol;
-        else sceneColOut = toLinear(vertexColor.rgb * vertexColor.a) * EMISSIVE_INTENSITY;
+        #ifdef EPILEPSY_SAFETY
+            vec3 boltTint = toLinear(LIGHTNING_COLOR) * 0.75;
+            if(entityId == 10129) sceneColOut = vertexColor.rgb * boltTint;
+            else sceneColOut = toLinear(vertexColor.rgb * vertexColor.a) * boltTint;
+        #else
+            vec3 boltTint = toLinear(LIGHTNING_COLOR) * EMISSIVE_INTENSITY;
+            if(entityId == 10129) sceneColOut = vertexColor.rgb * boltTint * 1.5;
+            else sceneColOut = toLinear(vertexColor.rgb * vertexColor.a) * boltTint * 1.5;
+        #endif
     }
 #endif

@@ -56,9 +56,9 @@ vec2 dcdy = dFdy(texCoord);
         }
     #endif
 
-    #ifdef SLOPE_NORMALS
-        uniform ivec2 atlasSize;
+    uniform ivec2 atlasSize;
 
+    #ifdef SLOPE_NORMALS
         // Slope normals by @null511
         vec2 getSlopeNormals(in vec3 viewT, in vec2 texUv, in float startDepth){
             vec2 texPixSize = 1.0 / atlasSize;
@@ -89,6 +89,13 @@ vec2 dcdy = dFdy(texCoord);
     #endif
 #endif
 
+vec4 sampleCrispAlbedoLab(in vec2 uv, in vec2 dcdx, in vec2 dcdy){
+    vec2 atlasRes = atlasSize.x > 0 ? vec2(atlasSize) : vec2(textureSize(gtexture, 0));
+    vec2 invAtlasRes = 1.0 / atlasRes;
+    vec2 snappedUv = (floor(uv * atlasRes) + 0.5) * invAtlasRes;
+    return textureGrad(gtexture, snappedUv, dcdx, dcdy);
+}
+
 // The lab PBR standard 1.3
 void getPBR(inout dataPBR material, in int id){
     vec2 texUv = texCoord;
@@ -102,11 +109,11 @@ void getPBR(inout dataPBR material, in int id){
 
         vec3 currPos;
 
-        if(hasFallback) texUv = fract(parallaxUv(vTexCoord, viewDir.xy / -viewDir.z, currPos)) * vTexCoordScale + vTexCoordPos;
+        if(hasFallback && id > 0) texUv = fract(parallaxUv(vTexCoord, viewDir.xy / -viewDir.z, currPos)) * vTexCoordScale + vTexCoordPos;
     #endif
 
-    // Assign albedo
-    material.albedo = textureGrad(gtexture, texUv, dcdx, dcdy);
+    // Assign albedo with crisp texel center alignment for authentic pixel art
+    material.albedo = sampleCrispAlbedoLab(texUv, dcdx, dcdy);
 
     // Alpha test, discard and return immediately
     if(material.albedo.a < ALPHA_THRESHOLD){ discard; return; }
@@ -162,15 +169,20 @@ void getPBR(inout dataPBR material, in int id){
         // If lava and fire
         if(id == 11100 || id == 12101) material.emissive = 1.0;
 
-        // Foliage and corals
-        else if((id >= 10000 && id <= 10800) || (id >= 11600 && id <= 11799) || id == 10900 || id == 11101 || id == 12200) material.ss = 0.75;
+        // Foliage and corals (kelp/seagrass 12200 excluded to avoid glowing underwater)
+        else if((id >= 10000 && id <= 10800) || (id >= 11600 && id <= 11799) || id == 10900 || id == 11101) material.ss = 0.75;
     #endif
 
     #ifdef WATER
         // If water
         if(id == 11102){
-            material.metallic = 0.02;
-            material.smoothness = 0.96;
+            #if WATER_STYLE == 1
+                material.metallic = 0.005;
+                material.smoothness = 0.55;
+            #else
+                material.metallic = 0.02;
+                material.smoothness = 0.96;
+            #endif
 
             #ifdef WATER_FLAT
                 material.albedo.rgb = vec3(0.8);
@@ -194,16 +206,19 @@ void getPBR(inout dataPBR material, in int id){
 
         // Charged creeper
         else if(id == 10132) material.emissive = float(material.albedo.b > material.albedo.g);
+
+        // Creaking eyes
+        else if(id == 10134) material.emissive = float(material.albedo.r > sumOf(material.albedo.gb) * 0.8);
     #endif
 
     #if COLOR_MODE == 0
-        material.albedo.rgb *= vertexColor;
+        material.albedo.rgb *= vertexColor.rgb;
     #elif COLOR_MODE == 1
         material.albedo.rgb = vec3(1);
     #elif COLOR_MODE == 2
         material.albedo.rgb = vec3(0);
     #elif COLOR_MODE == 3
-        material.albedo.rgb = vertexColor;
+        material.albedo.rgb = vertexColor.rgb;
     #endif
 
     // Get parallax shadows

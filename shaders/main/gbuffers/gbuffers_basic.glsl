@@ -101,7 +101,7 @@
 
 #ifdef FRAGMENT
     /* RENDERTARGETS: 4,3 */
-    layout(location = 0) out vec3 sceneColOut; // colortex4
+    layout(location = 0) out vec4 sceneColOut; // colortex4
     layout(location = 1) out vec3 materialDataOut; // colortex3
 
     flat in vec2 lmCoord;
@@ -119,6 +119,7 @@
 
     #ifndef FORCE_DISABLE_WEATHER
         uniform float rainStrength;
+        uniform float weatherFade;
     #endif
 
     #if defined SHADOW_FILTER && ANTI_ALIASING >= 2
@@ -130,7 +131,7 @@
         uniform float twilightPhase;
     #endif
 
-    #ifdef WORLD_VANILLA_FOG_COLOR
+    #if defined WORLD_VANILLA_FOG_COLOR || !defined FORCE_DISABLE_WEATHER
         uniform vec3 fogColor;
     #endif
 
@@ -161,7 +162,7 @@
         vec4 albedo = vertexColor;
 
         // Alpha test, discard and return immediately
-        if(albedo.a < ALPHA_THRESHOLD) { discard; return; }
+        if(albedo.a <= 0.001) { discard; return; }
 
         #if COLOR_MODE == 1
             albedo.rgb = vec3(1);
@@ -172,8 +173,12 @@
         // Convert to linear space
         albedo.rgb = toLinear(albedo.rgb);
 
-        // Apply simple shading
-        sceneColOut = basicShadingForward(albedo.rgb);
+        // Apply simple shading for lit in-world elements (e.g. leads).
+        // Overlays and unlit quads (e.g. Litematica selection boxes, mismatch highlights)
+        // retain their vivid unshaded linear color.
+        vec3 finalCol = (albedo.a < 0.999) ? albedo.rgb : basicShadingForward(albedo.rgb);
+
+        sceneColOut = vec4(finalCol, albedo.a);
     
         // Write material data
         materialDataOut = vec3(0);

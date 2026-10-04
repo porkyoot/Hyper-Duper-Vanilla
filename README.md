@@ -1,84 +1,178 @@
-![Thumbnail](https://github.com/Eldeston/Super-Duper-Vanilla/blob/master/shaders/textures/thumbCF.png?raw=true)
-![Title Logo](https://github.com/Eldeston/Super-Duper-Vanilla/blob/master/shaders/textures/title.png?raw=true)
-[![Discord](https://img.shields.io/discord/604061216779796492?style=for-the-badge&logo=discord&logoColor=white&label=FlameRender%C2%A9%20Studios&labelColor=7289DA)](https://discord.gg/UE85W5ynCg)
-[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/eldeston?style=for-the-badge&logo=x&label=%40eldeston&color=1DA1F2)](https://x.com/eldeston)
-[![YouTube Channel Subscribers](https://img.shields.io/youtube/channel/subscribers/UCQCkkFh25ydxZwCqpBhJJlg?color=FF0000&logoWidth=16&label=Eldeston&logo=YouTube&style=for-the-badge)](https://www.youtube.com/channel/UCQCkkFh25ydxZwCqpBhJJlg)
-![CurseForge Downloads](https://img.shields.io/curseforge/dt/534748?style=for-the-badge&logo=curseforge&logoColor=%23FFFFFF&label=CurseForge%20Downloads&color=%23FF9101)
-![Modrinth Downloads](https://img.shields.io/modrinth/dt/LMIZZNxZ?style=for-the-badge&logo=modrinth&logoColor=%23FFFFFF&label=Modrinth%20Downloads&color=%2300FF00)
+# HyperDuper Vanilla 🌟 (v1.0.0)
 
-## Description
-A shader pack created to convey the style of the cancelled __Super Duper Graphics Pack__ and other popular Minecraft titles. Developed by [@Eldeston](https://github.com/Eldeston), and presented by __FlameRender Studios__.
+[![License: Custom](https://img.shields.io/badge/License-FlameRender%20Studios-blue.svg)](LICENSE)
+[![Version: v1.0.0](https://img.shields.io/badge/Version-v1.0.0-success.svg)](https://github.com/porkyoot/HyperDuper-Vanilla/releases)
+[![Author: @porkyoot](https://img.shields.io/badge/Author-%40porkyoot%20(Étoile)-orange.svg)](https://github.com/porkyoot)
+[![Vibecoded with AI](https://img.shields.io/badge/Crafted%20with-AI%20Vibecoding-7928ca.svg)](#ai-vibecoding-journey)
+[![Target: Iris & Minecraft](https://img.shields.io/badge/Minecraft-1.18.2%20--%2026.x%20%2F%20Iris-green.svg)](#version-compatibility)
 
-## Sponsored by BisectHosting
-[![Sponsor](https://github.com/Eldeston/Super-Duper-Vanilla/blob/master/shaders/textures/sponsor0.png?raw=true)](https://bisecthosting.com/FLAMERENDERSTUDIOS)
-This shader is sponsored by **BisectHosting**. Open the image above or use the code [**FLAMERENDERSTUDIOS**](https://bisecthosting.com/FLAMERENDERSTUDIOS) to claim your discount to get ***25%*** off on your first month!
+> **HyperDuper Vanilla** is created and maintained by **[@porkyoot](https://github.com/porkyoot) (Étoile)**.
+> 
+> It is an independent, extensive overhaul and fork of [**Super Duper Vanilla**](https://github.com/Eldeston/Super-Duper-Vanilla) (originally created by [@Eldeston](https://github.com/Eldeston) and presented by **FlameRender Studios**).
+> 
+> Starting from the foundation of Super Duper Vanilla, Étoile completely reimagined and evolved the pack into their own creation through intensive **AI vibecoding**—introducing dynamic multi-day weather engines, hyper-optimized crepuscular godrays, procedural meteor showers, a gravitational lensing black hole in The End, Voxy LOD integrations, and an intuitive Sodium-style didactic configuration system.
 
-Choose **BisectHosting** to host a wide range of games including some of my personal favorites: **Minecraft, Terraria, and Project Zomboid**! ***65%*** of your first purchase will support the development of Super Duper Vanilla!
+---
 
-## Sponsored by Ember Host
-[![Sponsor](https://github.com/Eldeston/Super-Duper-Vanilla/blob/master/shaders/textures/sponsor1.png?raw=true)](https://billing.ember.host/aff.php?aff=23)
-This shader is sponsored by **Ember Host**. Open the image above or use the code [**SUPERFLAME**](https://billing.ember.host/aff.php?aff=23) to claim your discount to get ***10%*** off on your first purchase!
+## 🎬 Official Trailer & Showcase
 
-Choose **Ember Host** to host your Minecraft server and take advantage of their **powerful AMD processors** and go beyond with excellent prices! ***70%*** of your first purchase will support the development of Super Duper Vanilla!
+[![HyperDuper Vanilla Trailer](https://img.youtube.com/vi/2VPc-Q5AKDM/maxresdefault.jpg)](https://www.youtube.com/watch?v=2VPc-Q5AKDM "Watch the HyperDuper Vanilla Trailer")
 
-## Screenshots
-![2022-06-28_19 28 13](https://cdn.modrinth.com/data/LMIZZNxZ/images/bd57c68a400e0722bc7132575ea7cec66ca529ab.png)
-![2022-06-28_19 43 18](https://cdn.modrinth.com/data/LMIZZNxZ/images/1d38424b62d4461fae738019cbd1342145e9b4ac.png)
-![2022-06-28_19 49 58](https://cdn.modrinth.com/data/LMIZZNxZ/images/8edcb53225f8eeade023759c54df0916d9e3ff2a.png)
-![2022-07-04_20 31 16](https://cdn.modrinth.com/data/LMIZZNxZ/images/79de640c0254dd1f8ddf44052a79b57105a53f2c.png)
-![2022-07-04_20 36 15](https://cdn.modrinth.com/data/LMIZZNxZ/images/33a5e8c49e4a386c17a42ef48d96f240fa8e7d20.png)
-![2022-07-04_20 37 21](https://cdn.modrinth.com/data/LMIZZNxZ/images/f97e5cb26647bd487fae153b9942f87f373f7695.png)
-![2022-07-04_20 38 41](https://cdn.modrinth.com/data/LMIZZNxZ/images/7735240a7238b15b28dba555abf0cd03f798823a.png)
-![2022-07-04_20 40 49](https://cdn.modrinth.com/data/LMIZZNxZ/images/f643695cdd4ab9f7c95750fb8ff43f396cd16f6c.png)
-![2022-07-04_20 42 13](https://cdn.modrinth.com/data/LMIZZNxZ/images/8e152465e03a3861acf4a7be6eca82a86cf26f1a.png)
-![2022-07-04_20 49 54](https://cdn.modrinth.com/data/LMIZZNxZ/images/0126040f5bcc1828e2de2b059799ab7ffb3d08ec.png)
+> 📺 **Watch the Trailer on YouTube**: [https://youtu.be/2VPc-Q5AKDM](https://youtu.be/2VPc-Q5AKDM)
 
-## License 
-This shader uses the **FlameRender (C) Studios License**. See [**LICENSE**](LICENSE) for more info.
+---
 
-## Contribution
-If you plan to contribute to this project, see [**CONTRIBUTION**](CONTRIBUTION.md) for more info.
+## 🤖 The AI Vibecoding Journey
 
-## Mod Compatibility
-If you want to request mod compatibility with this shader, create an issue post in this repository with the mod that you want to enable compatibility via linking. If you're planning to add mod compatibility by coding it yourself, see [**CONTRIBUTION**](CONTRIBUTION.md).
+> [!NOTE]
+> **Crafted with Frontier Agentic AI**: HyperDuper Vanilla was built by **Étoile (@porkyoot)** leveraging heavy AI pair-programming and vibecoding workflows (collaborating with frontier coding agents like Google DeepMind Antigravity, Gemini, and Claude).
 
-## Version Compatibility
-Version compatibility varies across the 2 known shader loaders Iris and Optifine. Iris versions 1.6.10+ from Minecraft versions 1.18.2+ are compatible with this shader. For Optifine, it varies across GPU vendors. Please always choose the latest Iris or Optifine of your respective Minecraft version.
+Through rapid AI-assisted iteration, complex shader algorithms, numerical approximations, and large-scale architectural refactors were designed, tested, and fine-tuned:
+* **High-Velocity Mathematics**: Translating optical physics into GLSL—such as affine-stepped cone-culled raymarching for crepuscular rays, $C^1$ Hermite shadow smoothing, and Schwarzschild-inspired accretion disk light deflection.
+* **Continuous Quality Assurance**: Every line of GLSL and python tooling passes an automated **Continuous Quality Gate** (`python3 scripts/quality_gate.py`) verifying compilation through `glslangValidator`, inclusion resolution, McCabe cyclomatic complexity, and canonical i18n key coverage.
+* **Freedom to Tinker**: This project is provided on an **"AS IS"** basis. You are warmly encouraged to fork this repository, explore the code, and make it your own!
 
-Optifine support will not be prioritized or maintained starting from version 1.3.7 of this shader.
+---
 
-| Iris     | Windows, Linux (Intel, AMD, NVidia) | Apple (M1)      |
-| -------- | ----------------------------------- | --------------- |
-| 1.18.2+  | Supported                           | Supported       |
-| 1.17.1-  | Not supported                       | Not supported   |
+## ✨ Extensive Feature Showcase
 
-| Optifine | Windows, Linux (Intel, AMD, NVidia) | Apple (M1)      |
-| -------- | ----------------------------------- | --------------- |
-| 1.17.1+  | Partial support                     | Partial support |
-| 1.14.2+  | Partial support                     | Not supported   |
-| 1.13.2-  | Not supported                       | Not supported   |
+HyperDuper Vanilla v1.0.0 brings an extensive suite of new features, visual enhancements, and architectural overhauls:
 
-## Releases
-See all available releases [here](https://github.com/Eldeston/Super-Duper-Vanilla/releases). More recent builds are found in their corresponding branches, to download simply switch to the latest version branch, go to code (green button) and download as zip.
+### 1. 🌌 Celestial & Atmospheric Wonders
+* **Hyper-Optimized Crepuscular Godrays**:
+  * Real-time sunlight and moonlight volumetric shafts streaming through terrain, trees, water, and clouds.
+  * **Dual-Path Distance-Adaptive Raymarching**: Dynamically adjusts sampling density near the sun, **doubling FPS when looking directly into the sun** with zero visual loss.
+  * **Water Transmission**: Sunbeams realistically penetrate translucent ocean surfaces and stained glass.
+  * **Underground Occlusion**: Strict height and light checks prevent atmospheric light leaks into caves and deep underground structures.
+* **Procedural Dynamic Meteor Showers**:
+  * Shooting stars streak across night skies with glowing leading pixel heads, ionization trails, and soft fade decays.
+  * **Customizable Activity**: Choose between constant background meteors or dynamic waxing/waning shower waves with configurable speed, rarity, and tail length.
+  * **6 Gemstone Color Profiles**: Electric Blue, Cosmic Violet, Emerald Green, Amber Gold, Diamond White, and Prismatic (each meteor receives a unique randomized gemstone hue).
+* **Volumetric Northern Lights (Aurora Borealis)**:
+  * Multi-layered dancing auroral curtains featuring altitude-based color gradients (pink tops, emerald centers, electric blue skirts) triggered in cold and snowy biomes.
+* **Procedural Minecraft-Style Milky Way & Stars**:
+  * Stylized galactic dust ribbon arching across the night sky, peppered with twinkling procedural stars.
+  * **Star Rotation Settings**: Switch between aligned square pixel grids or organic rotated star fields.
+* **Double Rainbows & Rainsquares**:
+  * Procedural primary and secondary rainbow arches appearing opposite celestial light sources during light rain.
+  * Full terrain shadow and block occlusion prevents rainbows from rendering indoors or through mountains.
+* **Story Mode Clouds & Cirrus Altitude Layer**:
+  * Vertical fade transitions inspired by Minecraft: Story Mode with customizable cloud heights and faint cirrus layers.
+* **Continuous Celestial Roundness**:
+  * Smooth continuous slider transitioning celestial bodies from authentic retro square pixels to circular discs, automatically propagated to reflections and flares.
 
-Latest build and pre-release versions are expected to be unstable, please report any issues or bugs anytime. Feedback is much appreciated.
+---
 
-## Official Modrinth Page
-Super Duper Vanilla just happens to be on Modrinth! Stable and latest releases will always be available there. Check it out [here](https://modrinth.com/shader/super-duper-vanilla) and support me by using any one of the download links there!
+### 2. 🕳️ The End Dimension Overhaul
+* **Cosmic Gravitational Lensing Black Hole**:
+  * The End's central sky is dominated by a majestic black hole featuring spiral accretion disk texturing and gravitational light deformation.
+  * **Directional Global Illumination**: The accretion disk casts permanent directional lighting and shadows across the End islands.
+* **Cosmic End Flashes**:
+  * Dynamic sky flashes illuminate the void with synchronized directional shadows, atmospheric burst auras, and lens flares.
+* **Ender Dragon Boss Fog**:
+  * Atmospheric purple boss fog automatically descends upon and blankets the central island during the Ender Dragon fight.
+* **Volumetric Aether Curtains**:
+  * Shimmering atmospheric curtains adding depth and mystery to the void sky.
 
-## Official CurseForge Page
-Super Duper Vanilla is also on CurseForge! Stable and latest releases will always be available there. Check it out [here](https://www.curseforge.com/minecraft/customization/super-duper-vanilla-shaders) and support me by using any one of the download links there!
+---
 
-## Super Duper Vanilla Installer
-Alternatively, you can use this installer developed by [@steb-git](https://github.com/steb-git) allowing you to install either the release versions of SDV or the development versions. While the installer's task is relatively simple, it's still a WIP. [Use this link to go to the installer repository](https://github.com/steb-git/super-duper-vanilla-installer).
+### 3. 🌧️ Dynamic Weather & Environmental Fog
+* **Procedural Multi-Day Weather & Overcast**:
+  * A continuous weather clock smoothly transitions the sky between crystal-clear days, moody overcast fronts, and stormy skies.
+  * **Sun Showers**: Tuned rain overcast allows the sun and rainbows to break through during light precipitation.
+  * **Above-Cloud Rain Cutoff**: Rain particles and weather fog smoothly fade out when flying above the cloud layer.
+* **Dynamic Biome Humidity Fog**:
+  * Ground mist dynamically thickens based on biome moisture—rivers, swamps, and rainforests develop dense morning fog, while arid deserts remain clear.
+* **Pale Garden Atmospheric Mist**:
+  * Custom light-gray eerie atmospheric mist tailored specifically for the Pale Garden biome and its canopy.
+* **Creaking Eye Bloom**:
+  * Creaking eyes cast vivid emissive glow and bloom through dark forests at night.
 
-## Social Links
-Come join my Discord server to talk about other developments made by our studio-community!
-* [Flamerender Studios Discord](https://discord.gg/UE85W5ynCg)
+---
 
-Or follow me on Twitter or subscribe to my Youtube channel to get updated with my recent developments and contents
-* [@Eldeston's Twitter](https://twitter.com/eldeston)
-* [@Eldeston's Channel](https://www.youtube.com/channel/UCQCkkFh25ydxZwCqpBhJJlg?view_as=subscriber)
+### 4. ⚡ Storm & Procedural Lightning
+* **Multi-Tiered Lightning Engine**:
+  * Realistic cloud-to-ground lightning bolts paired with dynamic cloud-to-cloud intra-cloud flashes.
+* **Epilepsy & Sensory Safety**:
+  * Built-in flash dampeners to reduce sudden high-contrast brightness shifts for light-sensitive players.
+* **Customizable Bolt Colors**:
+  * Personalize storm bolts with customizable RGB tinting options.
 
-You can become a supporter by doing any of the above, or donate through paypal
-* [@Paypal donation](https://www.paypal.com/donate?hosted_button_id=4XLQ4WE296JKW)
+---
+
+### 5. 🌊 Water Shading, Wave Physics & Materials
+* **Multiple Water Aesthetic Styles**:
+  * Toggle between **Classic**, **Modern**, and **Stylized SDGP** water rendering presets.
+* **Depth-Based Wave Physics**:
+  * Dynamic wave attenuation in shallow shorelines with natural foam reduction near land edges.
+* **Refined Water Opacity & Subsurface Scattering (SSS)**:
+  * Natural color absorption, water albedo tuning, and exclusion of underwater flora from false subsurface glow.
+* **Targeted Block Outline**:
+  * Polished selection box with vanilla inverted color blending and customizable outline thickness.
+
+---
+
+### 6. 🏔️ Level-Of-Detail (LOD) & Engine Mod Compatibility
+* **Full Voxy LOD Integration**:
+  * Custom Uniform Buffer Object (UBO) alignments, PBR material lookups, view positioning, and border fog blending for distant Voxy terrain chunks.
+  * Dual depth support accommodating both OpenGL standard `[-1, 1]` NDC and `[0, 1]` zero-to-one depth pipelines.
+  * Translucent depth texture support for modded distant oceans and water bodies.
+* **Distant Horizons Compatibility**:
+  * Harmonized albedo colors and luma multipliers for smooth transition zones between local and distant terrain.
+
+---
+
+### 7. 🎛️ Modern UI/UX & Didactic Tooltip System
+* **Modular Dimensions Menu**:
+  * Replaced legacy menus with a unified **Dimensions & Worlds** (`[DIMENSIONS]`) screen.
+  * Pinned global settings (such as **Block Light Color** for torches, lanterns, campfires, lava) at the top.
+  * Clean per-world configuration blocks ready for modded dimension expansion.
+* **Flattened Materials & PBR Hierarchy**:
+  * Direct access to POM, Water, Lava, and Sculk settings without buried sub-menus.
+* **Sodium-Style Didactic Tooltips**:
+  * Every single option features clear didactic indicators:
+    * `§e[Visual]`: Explains exactly what changes on screen.
+    * `[Performance]`: Color-coded performance cost (`§a[Very Low / Low]`, `§e[Moderate]`, `§c[Heavy / Very Heavy]`).
+    * `§b[Tip]`: Practical advice, synergies, and recommended baselines.
+* **Comprehensive i18n Localization**:
+  * Full coverage across English (`en_US`), French (`fr_FR`), Simplified Chinese (`zh_CN`), Brazilian Portuguese (`pt_BR`), and Russian (`ru_RU`).
+
+---
+
+### 8. 🛠️ Developer Tooling & Quality Gate
+* **Automated CI/CD Quality Gate** (`python3 scripts/quality_gate.py`):
+  * Parallel GLSL compilation using `glslangValidator`.
+  * i18n dictionary validator checking key coverage and syntax integrity.
+  * McCabe cyclomatic complexity and file length gate.
+  * Strict include reference resolver.
+* **GPU Cost Profiler** (`scripts/profile_shaders.py`):
+  * Static AST analyzer measuring texture lookups, transcendental math, and branch weights.
+* **Live In-Game Hot-Reload** (`./gradlew runClient`):
+  * Instant shader compilation on **`R`** keypress in a standalone Quilt/Iris runtime testbed.
+
+---
+
+## 🎮 Installation & Requirements
+
+### Shader Loaders
+* **Iris**: Recommended! Fully supported on Iris 1.6.10+ (Minecraft 1.18.2 through 1.21+ / 26.x).
+* **OptiFine**: Legacy support; not actively tested.
+
+### Supported Hardware & OS
+* **Windows / Linux**: Fully supported on AMD, NVIDIA, and Intel (both dedicated and modern integrated GPUs).
+* **Apple Silicon (macOS)**: Supported on M1/M2/M3/M4 via Iris.
+
+### Installation Steps
+1. Download `HyperDuper-Vanilla-v1.0.0.zip` from the [Releases](https://github.com/porkyoot/HyperDuper-Vanilla/releases) page.
+2. Place the `.zip` archive into your Minecraft `.minecraft/shaderpacks/` folder.
+3. In Minecraft (with Iris installed), navigate to **Options > Video Settings > Shader Packs...** and select **HyperDuper Vanilla**.
+
+---
+
+## 📜 Credits & License Attributions
+
+HyperDuper Vanilla is developed by **[@porkyoot](https://github.com/porkyoot) (Étoile)** and is built upon the wonderful foundation of **Super Duper Vanilla**:
+* **Original Creator of Super Duper Vanilla**: [@Eldeston](https://github.com/Eldeston) and **FlameRender Studios**.
+* **Original Project**: [Super Duper Vanilla on GitHub](https://github.com/Eldeston/Super-Duper-Vanilla) | [CurseForge](https://www.curseforge.com/minecraft/customization/super-duper-vanilla-shaders) | [Modrinth](https://modrinth.com/shader/super-duper-vanilla)
+* **Upstream Contributors**: [@null511](https://github.com/null511), [@steb-git](https://github.com/steb-git), and original community translators.
+* **License**: Governed by the **FlameRender Studios License (v1.6)**. See [LICENSE](LICENSE) for the full license terms and copyright notices.
