@@ -309,21 +309,21 @@
         depth = vanillaDepth;
         isLOD = false;
         #if defined DISTANT_HORIZONS
-            if(vanillaDepth == 1.0){
+            if(vanillaDepth >= 0.99999){
                 float dhDepth = texelFetch(dhDepthTex0, screenTexelCoord, 0).x;
-                if(dhDepth < 1.0){
+                if(dhDepth < 0.99999){
                     depth = dhDepth;
                     isLOD = true;
                 }
             }
         #elif defined VOXY
-            if(vanillaDepth == 1.0){
+            if(vanillaDepth >= 0.99999){
                 float vxOpaque = texelFetch(vxDepthTexOpaque, screenTexelCoord, 0).x;
                 float vxTrans = texelFetch(vxDepthTexTrans, screenTexelCoord, 0).x;
                 float vxDepth = 1.0;
-                if(vxOpaque > 0.0 && vxOpaque < 1.0) vxDepth = vxOpaque;
+                if(vxOpaque > 0.0 && vxOpaque < 0.99999) vxDepth = vxOpaque;
                 if(vxTrans > 0.0 && vxTrans < vxDepth) vxDepth = vxTrans;
-                if(vxDepth < 1.0){
+                if(vxDepth < 0.99999){
                     depth = vxDepth;
                     isLOD = true;
                 }
@@ -361,7 +361,7 @@ vec3 applyDeferredSkyEffects(in vec3 sceneCol, in vec3 nEyePlayerPos, in vec3 sk
         vec3 screenPos = vec3(texCoord, depth);
 
         // Get sky mask
-        bool skyMask = screenPos.z == 1.0;
+        bool skyMask = screenPos.z >= 0.99999;
 
         // Jitter the sky only
         #if ANTI_ALIASING == 2

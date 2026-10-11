@@ -189,7 +189,7 @@ vec3 getSkyBasic(in float nEyePlayerPosY, in float skyPosZ){
         #endif
     #endif
 
-    #ifndef EPILEPSY_SAFETY
+    #if WORLD_ID == 0 && !defined EPILEPSY_SAFETY
         currSkyCol += toLinear(mix(vec3(1.0), LIGHTNING_COLOR, 0.15)) * getLightningFlashIntensity();
     #endif
 
@@ -294,16 +294,15 @@ vec3 getSkyFogRender(in vec3 nEyePlayerPos, in vec3 skyPos, in vec3 currSkyCol){
 
     #ifndef WORLD_CUSTOM_SKYLIGHT
         float skyExposure = smoothstep(0.08, 0.40, eyeBrightFact);
+        // Void gradient calculation, modulated by skylight so caves and underground stay dark
+        float voidGrad = saturate(nEyePlayerPos.y * 2.0 + eyeBrightFact * 2.0);
+        vec3 outdoorFog = currSkyCol * voidGrad;
+        vec3 caveFog = vec3(toLinear(AMBIENT_LIGHTING + nightVision * 0.5));
+
+        return mix(caveFog, outdoorFog, skyExposure);
     #else
-        const float skyExposure = 1.0;
+        return currSkyCol * saturate(nEyePlayerPos.y * 2.0 + eyeBrightFact * 2.0);
     #endif
-
-    // Void gradient calculation, modulated by skylight so caves and underground stay dark
-    float voidGrad = saturate(nEyePlayerPos.y * 2.0 + 1.0);
-    vec3 outdoorFog = currSkyCol * voidGrad;
-    vec3 caveFog = vec3(toLinear(AMBIENT_LIGHTING + nightVision * 0.5));
-
-    return mix(caveFog, outdoorFog, skyExposure);
 }
 
 vec3 getSkyFogRender(in vec3 nEyePlayerPos){

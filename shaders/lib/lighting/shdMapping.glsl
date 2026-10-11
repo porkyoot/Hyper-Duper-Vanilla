@@ -8,7 +8,7 @@ const bool shadowHardwareFiltering = true; // Free slightly better filtering
 
 const float shadowDistance = 128.0; // Shadow distance. Increase to stretch the shadow map to farther distances in blocks. It's recommended to match this setting with your render distance and increase your shadow map resolution. [32.0 64.0 96.0 128.0 160.0 192.0 224.0 256.0 288.0 320.0 352.0 384.0 416.0 448.0 480.0 512.0 544.0 576.0 608.0 640.0 672.0 704.0 736.0 768.0 800.0 832.0 864.0 896.0 928.0 960.0 992.0 1024.0]
 const float shadowDistanceRenderMul = 1.0; // Hardcoded to be always 1.0 for maximum optimization.
-const float entityShadowDistanceMul = 0.5; // Renders the entity shadows at half shadowDistance. Iris only.
+const float entityShadowDistanceMul = 0.25; // Entity shadow distance multiplier relative to shadow distance. Iris only. [0.01 0.02 0.05 0.08 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.50 0.60 0.75 1.00]
 
 // Shadow opaque
 uniform sampler2DShadow shadowtex0;

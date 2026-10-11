@@ -73,9 +73,11 @@ screen.LIGHTING = Освещение
     option.SHADOW_COLOR = Цветные тени
     option.SHADOW_FILTER = Сглаживание теней
     option.ENTITY_SHADOWS = Тени сущностей
+    option.PLAYER_SHADOW = Тень игрока
     option.BLOCK_ENTITY_SHADOWS = Тени блоков-сущностей
     option.shadowMapResolution = Разрешение карты теней
     option.shadowDistance = Дальность теней
+    option.entityShadowDistanceMul = Дальность теней сущностей
     option.sunPathRotation = Долгота
 
     option.UNDERWATER_CAUSTICS = Водная каустика

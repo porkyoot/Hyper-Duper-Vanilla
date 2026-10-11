@@ -1,5 +1,11 @@
 // Fast previous frame reprojection based from Chocapic13's previous frame reprojection and Jessie's fast space conversions for all your TAA and motion blur needs
 vec2 getPrevScreenCoord(in vec2 currScreenPos, in float screenDepth){
+	if(screenDepth >= 0.99999){
+		vec3 currViewPos = getViewPos(gbufferProjectionInverse, vec3(currScreenPos, 1.0));
+		vec3 prevViewPos = mat3(gbufferPreviousModelView) * (mat3(gbufferModelViewInverse) * currViewPos);
+		return getScreenCoord(gbufferPreviousProjection, prevViewPos);
+	}
+
 	vec3 currViewPos = getViewPos(gbufferProjectionInverse, vec3(currScreenPos, screenDepth));
 	vec3 currFeetPlayerPos = mat3(gbufferModelViewInverse) * currViewPos + gbufferModelViewInverse[3].xyz;
 

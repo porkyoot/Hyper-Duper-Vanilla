@@ -156,7 +156,10 @@ screen.LIGHTING.comment = §6Options d'éclairage et d'ombres incluant le shadow
     option.SHADOW_FILTER.comment = Active le filtrage adouci des ombres. Si activé, les ombres apparaîtront plus douces en utilisant du bruit. Peut impacter les performances.
 
     option.ENTITY_SHADOWS = Ombres des entités
-    option.ENTITY_SHADOWS.comment = Active les ombres des entités.
+    option.ENTITY_SHADOWS.comment = Active les ombres des entités (animaux, monstres, créatures).
+
+    option.PLAYER_SHADOW = Ombre du joueur
+    option.PLAYER_SHADOW.comment = Active les ombres dynamiques du joueur et des montures. Permet de conserver son ombre tout en désactivant celle des entités pour un gain de performances majeur.
 
     option.BLOCK_ENTITY_SHADOWS = Ombres des blocs-entités
     option.BLOCK_ENTITY_SHADOWS.comment = Active les ombres des blocs-entités.
@@ -166,6 +169,9 @@ screen.LIGHTING.comment = §6Options d'éclairage et d'ombres incluant le shadow
 
     option.shadowDistance = Distance des ombres
     option.shadowDistance.comment = Distance de rendu des ombres portées.
+
+    option.entityShadowDistanceMul = Distance des ombres d'entités
+    option.entityShadowDistanceMul.comment = Multiplicateur de distance de rendu des ombres pour les entités et monstres. Réduire cette valeur améliore grandement les performances près des fermes à monstres.
 
     option.sunPathRotation = Angle de trajectoire de la lumière
     option.sunPathRotation.comment = Angle de la trajectoire de la lumière. Affecte également l'angle du ciel.

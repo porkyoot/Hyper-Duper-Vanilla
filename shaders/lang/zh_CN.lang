@@ -151,7 +151,10 @@ screen.LIGHTING.comment = §6光照和阴影选项, 包括阴影映射, 实体�
     option.SHADOW_FILTER.comment = 启用软阴影过滤, 启用后阴影将通过使用噪波以显得更柔和. 可能影响性能.
 
     option.ENTITY_SHADOWS = 实体阴影
-    option.ENTITY_SHADOWS.comment = 启用实体阴影.
+    option.ENTITY_SHADOWS.comment = 启用实体阴影(动物、怪物等). 刷怪场中建议关闭以大幅提升性能.
+
+    option.PLAYER_SHADOW = 玩家阴影
+    option.PLAYER_SHADOW.comment = 启用玩家及坐骑的阴影. 允许在关闭普通实体阴影时仍保留玩家自身阴影.
 
     option.BLOCK_ENTITY_SHADOWS = 方块实体阴影
     option.BLOCK_ENTITY_SHADOWS.comment = 启用方块实体阴影.
@@ -161,6 +164,9 @@ screen.LIGHTING.comment = §6光照和阴影选项, 包括阴影映射, 实体�
 
     option.shadowDistance = 阴影映射距离
     option.shadowDistance.comment = 阴影映射距离.
+
+    option.entityShadowDistanceMul = 实体阴影距离
+    option.entityShadowDistanceMul.comment = 实体阴影渲染距离倍率. 调低该值可显著减少远距离实体阴影带来的性能开销.
 
     option.sunPathRotation = 光路角度
     option.sunPathRotation.comment = 光路角度. 也会影响天空角度.

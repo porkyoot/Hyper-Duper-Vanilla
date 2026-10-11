@@ -75,9 +75,11 @@ screen.LIGHTING = Iluminação
     option.SHADOW_COLOR = Cor do Mapa de Sombras
     option.SHADOW_FILTER = Filtro do Mapa de Sombras
     option.ENTITY_SHADOWS = Sombra de Entidades
+    option.PLAYER_SHADOW = Sombra do Jogador
     option.BLOCK_ENTITY_SHADOWS = Sombra da Entidade de Blocos
     option.shadowMapResolution = Resolução do Mapa de Sombras
     option.shadowDistance = Distância do Mapa de Sombras
+    option.entityShadowDistanceMul = Distância da Sombra de Entidades
     option.sunPathRotation = Ângulo do Caminho de Luz
 
     option.UNDERWATER_CAUSTICS = Cáusticas Subaquáticas

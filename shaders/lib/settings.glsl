@@ -55,7 +55,8 @@
 #define SHADOW_FILTER // Enables soft shadow filtering, if enabled shadows will appear softer by using noise. May impact performance.
 #define SHADOW_COLOR // Enables shadow color from colored transparent objects.
 
-#define ENTITY_SHADOWS // Enables entity shadows.
+// #define ENTITY_SHADOWS // Enables entity shadows (animals, monsters, mobs).
+#define PLAYER_SHADOW // Enables player shadow. Iris only.
 #define BLOCK_ENTITY_SHADOWS // Enables block entity shadows.
 
 const float sunPathRotation = 30.0; // Light path angle. This also affects sky angle. [-60.0 -55.0 -50.0 -45.0 -40.0 -35.0 -30.0 -25.0 -20.0 -15.0 -10.0 -5.0 0.0 5.0 10.0 15.0 20.0 25.0 30.0 35.0 40.0 45.0 50.0 55.0 60.0]
@@ -275,6 +276,9 @@ const float PHYSICS_NORMAL_STRENGTH = 0.6;
 #endif
 
 #ifdef ENTITY_SHADOWS
+#endif
+
+#ifdef PLAYER_SHADOW
 #endif
 
 #ifdef BLOCK_ENTITY_SHADOWS

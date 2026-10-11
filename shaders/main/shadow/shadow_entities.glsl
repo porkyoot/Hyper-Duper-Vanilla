@@ -93,7 +93,7 @@
                 if(shdAlbedo.a < ALPHA_THRESHOLD){ discard; return; }
 
                 // If the object is fully opaque, set to black. This fixes "color leaking" filtered shadows
-                if(shdAlbedo.a == 1){
+                if(shdAlbedo.a >= 0.99){
                     shadowColOut = vec3(0);
                     return;
                 }

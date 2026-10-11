@@ -171,11 +171,17 @@ screen.LIGHTING.comment = Sunlight and moonlight shadows, ambient occlusion, cau
     option.shadowDistance = Shadow Render Distance
     option.shadowDistance.comment = The maximum distance in blocks from the player where dynamic shadows are cast.\n\n§e[Visual] §fHigher values render shadows on distant hills and faraway trees.\n§e[Performance: Moderate Impact] §fExpands the celestial frustum volume.\n§b[Tip] §7120 to 160 blocks looks great while maintaining high performance.
 
+    option.entityShadowDistanceMul = Entity Shadow Distance
+    option.entityShadowDistanceMul.comment = Multiplies the shadow render distance specifically for entities and mobs.\n\n§e[Visual] §fControls how far away entities and mobs will cast shadows.\n§a[Performance: High Impact] §fLowering this reduces entity animation and geometry overhead in the shadow pass significantly.\n§b[Tip] §7Setting to 0.25x or 0.10x gives massive FPS gains near mob farms!
+
     option.sunPathRotation = Sun Path Angle
     option.sunPathRotation.comment = Tilts the orbital trajectory angle of the sun and moon across the sky dome.\n\n§e[Visual] §fChanges the angle of shadows and sunlight shafts across terrain and builds.\n§a[Performance: None] §fCelestial rotation matrix calculation.\n§b[Tip] §730.0 gives iconic, dramatic diagonal lighting across the Minecraft world.
 
     option.ENTITY_SHADOWS = Entity Shadows
-    option.ENTITY_SHADOWS.comment = Renders real-time dynamic shadows for animals, monsters, players, and boats.\n\n§e[Visual] §fCharacters and mobs cast realistic shadows on the ground below them.\n§a[Performance: Low to Moderate] §fPasses entity geometry through shadow framebuffer.\n§b[Tip] §7Turn off in crowded mob farms if you experience CPU/GPU bottlenecks.
+    option.ENTITY_SHADOWS.comment = Renders real-time dynamic shadows for animals, monsters, items, and boats.\n\n§e[Visual] §fMobs and creatures cast realistic shadows on the ground below them.\n§c[Performance: Heavy Impact] §fRe-renders and animates all nearby entities in the shadow pass.\n§b[Tip] §7Turn off in crowded mob farms for a huge FPS boost. Use Player Shadow to keep your own shadow!
+
+    option.PLAYER_SHADOW = Player Shadow
+    option.PLAYER_SHADOW.comment = Renders real-time dynamic shadows for the player and ridden vehicles.\n\n§e[Visual] §fYour character and mount cast dynamic shadows.\n§a[Performance: Minimal Impact] §fOnly processes the player model in the shadow pass.\n§b[Tip] §7Keep enabled alongside turning off Entity Shadows for the best balance of visuals and performance at mob farms!
 
     option.BLOCK_ENTITY_SHADOWS = Block Entity Shadows
     option.BLOCK_ENTITY_SHADOWS.comment = Renders dynamic shadows for chests, bells, banners, signs, and decorative block entities.\n\n§e[Visual] §fChests and decorative blocks cast accurate shadows on floors and walls.\n§a[Performance: Low Impact] §fPasses block entities to the shadow buffer.\n§b[Tip] §7Disable if your base contains hundreds of storage chests.

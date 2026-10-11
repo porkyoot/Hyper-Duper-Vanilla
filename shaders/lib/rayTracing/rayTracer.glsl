@@ -37,7 +37,7 @@ vec3 rayTraceScene(in vec3 screenPos, in vec3 viewPos, in vec3 rayDir, in float 
 			#if RAYTRACER_BISTEPS != 0
 				for(uint j = 0u; j < rayTraceBiSteps; j++){
 					// If sky return immediately
-					if(currDepth == 1.0) return vec3(0.0);
+					if(currDepth >= 0.99999) return vec3(0.0);
 
 					// Continue refinement
 					screenPosRayDir *= 0.5;
@@ -48,10 +48,10 @@ vec3 rayTraceScene(in vec3 screenPos, in vec3 viewPos, in vec3 rayDir, in float 
 					// Check intersection
 					intersection = currDepth < startPos.z;
 				}
-				if(currDepth == 1.0) return vec3(0.0);
+				if(currDepth >= 0.99999) return vec3(0.0);
 			#else
 				// If sky return immediately
-				if(currDepth == 1.0) return vec3(0.0);
+				if(currDepth >= 0.99999) return vec3(0.0);
 			#endif
 
 			// Return final results

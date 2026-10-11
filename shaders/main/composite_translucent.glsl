@@ -342,21 +342,21 @@
         depth = vanillaDepth;
         isLOD = false;
         #if defined DISTANT_HORIZONS
-            if(vanillaDepth == 1.0){
+            if(vanillaDepth >= 0.99999){
                 float dhDepth = texelFetch(dhDepthTex0, screenTexelCoord, 0).x;
-                if(dhDepth < 1.0){
+                if(dhDepth < 0.99999){
                     depth = dhDepth;
                     isLOD = true;
                 }
             }
         #elif defined VOXY
-            if(vanillaDepth == 1.0){
+            if(vanillaDepth >= 0.99999){
                 float vxOpaque = texelFetch(vxDepthTexOpaque, screenTexelCoord, 0).x;
                 float vxTrans = texelFetch(vxDepthTexTrans, screenTexelCoord, 0).x;
                 float vxDepth = 1.0;
-                if(vxOpaque > 0.0 && vxOpaque < 1.0) vxDepth = vxOpaque;
+                if(vxOpaque > 0.0 && vxOpaque < 0.99999) vxDepth = vxOpaque;
                 if(vxTrans > 0.0 && vxTrans < vxDepth) vxDepth = vxTrans;
-                if(vxDepth < 1.0){ depth = vxDepth; isLOD = true; }
+                if(vxDepth < 0.99999){ depth = vxDepth; isLOD = true; }
             }
         #endif
     }
@@ -429,7 +429,7 @@
         in float viewDist, in float fogFactor, in float borderFog, in float depth, in vec3 matRaw0
     ){
         #if defined WORLD_LIGHT || !defined FORCE_DISABLE_CLOUDS && CLOUD_TYPE == 2
-            bool isSky = depth == 1.0;
+            bool isSky = depth >= 0.99999;
             float feetPlayerDist = length(feetPlayerPos);
             vec3 nFeetPlayerPos = feetPlayerPos / max(0.0001, feetPlayerDist);
         #endif
