@@ -438,7 +438,7 @@ vec3 getFullSkyRender(in vec3 nEyePlayerPos, in vec3 skyPos, in vec3 currSkyCol)
                 #else
                     float cFade = 1.0 - celestialVis;
                     if(skyPos.z > 0.0){
-                        float effSun = max(sunPower / max(0.20, celestialVis), 0.60);
+                        float effSun = saturate(sunPower / max(0.20, celestialVis));
                         currSkyCol += getSunRender(skyPos.xy / abs(skyPos.z), sRGBSunCol * (effSun * cloudOcc), cFade);
                     } else {
                         float effMoon = max(moonPower / max(0.20, celestialVis), 0.60);
